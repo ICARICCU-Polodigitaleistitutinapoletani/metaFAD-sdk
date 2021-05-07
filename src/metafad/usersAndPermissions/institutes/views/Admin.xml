@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cmp="metafad.usersAndPermissions.institutes.views.components.*"
+          xmlns:com="metafad.common.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active"
+                            addQueryString="true" visible="false"/>
+
+    <mvc:State id="stateIndex" name="index" label="{i18n:Elenco}" url="metafad.usersAndPermissions.institutes#list">
+        <com:DataGridAjax id="dataGrid" recordClassName="metafad.usersAndPermissions.institutes.models.Model"
+                          cssClass="table table-bordered table-striped"
+                          controllerName="metafad.usersAndPermissions.institutes.controllers.*" fullTextSearch="false"
+                          JQueryUI="true">
+            <pnx:DataGridColumn columnName="institute_name" headerText="{i18n:Nome istituto}"/>
+            <pnx:DataGridColumn columnName="institute_isActive" headerText="{i18n:Attivo}" cssClass="center"
+                                renderCell="metafad.usersAndPermissions.institutes.views.renderer.CellInstitutesActive"/>
+            <pnx:DataGridColumn columnName="institute_id" sortable="false" searchable="false" cssClass="actions"
+                                renderCell="metafad.usersAndPermissions.institutes.views.renderer.CellEditDelete"/>
+        </com:DataGridAjax>
+        <com:AddButton label="" acl="*,new" routeUrl="metafad.usersAndPermissions.institutes" editableRegion="actions"
+                       recordClassName="metafad.usersAndPermissions.institutes.models.Model" dataGridAjaxId="dataGrid"/>
+    </mvc:State>
+
+    <mvc:State id="stateEdit" name="edit" label="{i18n:Scheda}" draw="false">
+        <cms:FormEdit id="editForm" newCode="true" controllerName="metafad.usersAndPermissions.institutes.controllers.*">
+            <pnx:Hidden id="__id"/>
+            <pnx:Hidden id="__model" value="metafad.usersAndPermissions.institutes.models.Model"/>
+            <pnx:Input id="institute_name" label="{i18n:Nome istituto}" required="true"/>
+            <pnx:Input data="type=selectfrom;add_new_values=false;proxy=metafad.usersAndPermissions.users.models.proxy.UsersProxy;return_object=true"
+                    id="institute_resp" label="{i18n:Responsabile richieste}" />
+            <pnx:Checkbox id="institute_isActive" label="{i18n:Attivo}" type="checkbox"/>
+            <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:PNX_SAVE}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save"
+                                data="action=save" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save"
+                                data="action=saveClose" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link"
+                                cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel"/>
+            </cms:FormButtonsPanel>
+        </cms:FormEdit>
+    </mvc:State>
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="metafad.usersAndPermissions.institutes.controllers.Delete"/>
+    </mvc:State>
+
+</mvc:Page>

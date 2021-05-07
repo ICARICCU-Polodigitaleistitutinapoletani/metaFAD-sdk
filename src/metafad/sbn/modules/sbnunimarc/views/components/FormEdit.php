@@ -1,0 +1,4 @@
+<?php
+class metafad_sbn_modules_sbnunimarc_views_components_FormEdit extends pinaxcms_views_components_FormEdit
+{
+}

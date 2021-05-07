@@ -1,0 +1,65 @@
+{
+    "##default1##": [
+        {
+            "xpath": "/eac-cpf:eac-cpf/eac-cpf:control/eac-cpf:maintenanceStatus",
+            "hasDefault": true,
+            "default": "control_maintenanceStatus"
+        }
+    ],
+    "##default2##": [
+        {
+            "xpath": "/eac-cpf:eac-cpf/eac-cpf:control/eac-cpf:publicationStatus",
+            "hasDefault": true,
+            "default": "control_publicationStatus"
+        }
+    ],
+    "##default3##": [
+        {
+            "xpath": "/eac-cpf:eac-cpf/eac-cpf:control/eac-cpf:maintenanceAgency/eac-cpf:agencyCode",
+            "hasDefault": true,
+            "default": "control_maintenanceAgency_agencyCode"
+        }
+    ],
+    "##default4##": [
+        {
+            "xpath": "/eac-cpf:eac-cpf/eac-cpf:control/eac-cpf:maintenanceAgency/eac-cpf:agencyName",
+            "hasDefault": true,
+            "default": "control_maintenanceAgency_agencyName"
+        }
+    ],
+    "##default5##": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:control/eac-cpf:maintenanceHistory/eac-cpf:maintenanceEvent",
+        "objectRoot": "eac-cpf:maintenanceEvent",
+        "hasDefault": true,
+        "defaultRoot": "compilazione",
+        "object": [
+            {
+                "field": "azione",
+                "xpath": "./eac-cpf:eventType",
+                "default": "compilazione#compilazione_azione",
+                "dictionary": "compilazione_azione"
+            },
+            {
+                "field": "data",
+                "xpath": "./eac-cpf:eventDateTime",
+                "hasDefault": true,
+                "utility": "generateIsoDate"
+            },
+            {
+                "field": "tipologiaRedattore",
+                "xpath": "./eac-cpf:agentType",
+                "default": "compilazione#compilazione_tipo",
+                "dictionary": "compilazione_tipo"
+            },
+            {
+                "field": "redattore",
+                "xpath": "./eac-cpf:agent",
+                "default": "compilazione#compilazione_redattore"
+            },
+            {
+                "field": "note",
+                "xpath": "./eac-cpf:eventDescription"
+            }
+        ]
+    }
+}

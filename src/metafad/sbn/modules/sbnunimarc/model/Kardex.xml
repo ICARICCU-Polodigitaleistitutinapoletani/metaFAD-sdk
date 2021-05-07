@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model:Model xmlns:model="pinax.models.*/"
+             xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+             model:usePrefix="true"
+             model:tableName="kardex_tbl">
+</model:Model>

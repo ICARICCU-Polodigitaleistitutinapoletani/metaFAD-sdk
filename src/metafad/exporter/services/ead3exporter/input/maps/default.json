@@ -1,0 +1,101 @@
+{
+    "##default1##": [
+        {
+            "xpath": "/ead:ead/ead:control",
+            "attribute": "repositoryencoding",
+            "hasDefault": true,
+            "default": "control_repositoryencoding"
+
+        }
+    ],
+    "##default2##": [
+        {
+            "xpath": "/ead:ead/ead:control",
+            "attribute": "countryencoding",
+            "hasDefault": true,
+            "default": "control_countryencoding"
+
+        }
+    ],
+    "##default3##": [
+        {
+            "xpath": "/ead:ead/ead:control",
+            "attribute": "dateencoding",
+            "hasDefault": true,
+            "default": "control_dateencoding"
+
+        }
+    ],
+    "##default4##": [
+        {
+            "xpath": "/ead:ead/ead:control",
+            "attribute": "scriptencoding",
+            "hasDefault": true,
+            "default": "control_scriptencoding"
+
+        }
+    ],
+    "##default5##": [
+        {
+            "xpath": "/ead:ead/ead:control",
+            "attribute": "langencoding",
+            "hasDefault": true,
+            "default": "control_langencoding"
+        }
+    ],
+    "##default6##": [
+        {
+            "xpath": "/ead:ead/ead:control",
+            "attribute": "relatedencoding",
+            "hasDefault": true,
+            "default": "control_relatedencoding"
+        }
+    ],
+    "##default7##": [
+        {
+            "xpath": "/ead:ead/ead:control/ead:maintenancestatus",
+            "attribute": "value",
+            "hasDefault": true,
+            "default": "control_maintenancestatus"
+        }
+    ],
+    "##default8##": [
+        {
+            "xpath": "/ead:ead/ead:control/ead:maintenanceagency/ead:agencyname",
+            "hasDefault": true,
+            "default": "control_maintenanceagency_agencyname"
+        }
+    ],
+    "##default9##": {
+        "xpath": "/ead:ead/ead:control/ead:maintenancehistory/ead:maintenanceevent",
+        "objectRoot": "ead:maintenanceevent",
+        "defaultRoot": "compilazione",
+        "hasDefault": true,
+        "object": [
+            {
+                "field": "azione",
+                "xpath": "./ead:eventtype",
+                "attribute": "value",
+                "default": "compilazione#compilazione_azione",
+                "dictionary": "compilazione_azione"
+            },
+            {
+                "field": "data",
+                "xpath": "./ead:eventdatetime",
+                "hasDefault": true,
+                "utility": "generateIsoDate"
+            },
+            {
+                "field": "tipologiaRedattore",
+                "xpath": "./ead:agenttype",
+                "attribute": "value",
+                "constant": "machine"
+            },
+            {
+                "field": "redattore",
+                "xpath": "./ead:agent",
+                "default": "compilazione#compilazione_redattore"
+            }
+        ]
+    }
+}

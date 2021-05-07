@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:evc="metafad.jobsReport.views.components.*"
+    xmlns:c="metafad.iccd.views.components.*"
+    controllerName="metafad.jobsReport.controllers.*"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Page.php">
+    <pnx:Import src="_common.xml" />
+
+    <mvc:State name="index" >
+       <!-- la classe import-export è una classe d'apoggio momentanea. 
+            Da eliminare non appena sistemata questa parte > MFADEV-373 -->
+      <c:FormEdit id="filterForm" newCode="true" cssClass="import-export">
+        <pnx:Input id="titolo" label="" placeholder="Filtra elenco..."/>
+        <pnx:List id="show" label="" >
+            <pnx:ListItem key="all" value="Mostra tutto"/>
+            <pnx:ListItem key="import" value="Importazioni"/>
+            <pnx:ListItem key="export" value="Esportazioni"/>
+        </pnx:List>
+        <pnx:Panel cssClass="export-option">
+        <pnx:Date id="dateFrom" label="" defaultNow="true" cssClass="short" />
+        <pnx:Date id="dateTo"   label="" defaultNow="true" cssClass="short" />
+        </pnx:Panel>
+         <pnx:HtmlButton label="Cerca" name="action" id="action" cssClass="btn btn-flat btn-info"/>
+        <pnx:Panel cssClass="export-option">
+          <pnx:Panel cssClass="export-option-checkbox">
+            <pnx:Checkbox id="done" label="Eseguito" cssClassLabel="" applyFormItemTemplate="false" />
+          </pnx:Panel>
+          <pnx:Panel cssClass="export-option-checkbox">
+            <pnx:Checkbox id="inExecution" label="Esecuzione in corso" cssClassLabel="" applyFormItemTemplate="false" defaultValue="true"/>
+          </pnx:Panel>
+          <pnx:Panel cssClass="export-option-checkbox">
+            <pnx:Checkbox id="error" label="Errore" cssClassLabel="" applyFormItemTemplate="false" defaultValue="true"/>
+          </pnx:Panel>
+        </pnx:Panel>
+      </c:FormEdit>
+
+        <evc:PluginsReport id="report" paginate="{paginate}"/>
+        <pnx:PaginateResult id="paginate" pageLength="10" cssClass="pagination" skin="PaginateResult.html" />
+
+<!-- <pnx:JSscript><![CDATA[
+$( document ).ready( function(){
+    // aggiorna il report ogni secondo
+    var UPDATE_INTERVAL = 1;
+
+    setInterval(updateReport, UPDATE_INTERVAL*1000);
+
+    function updateReport() {
+        $.ajax( {
+            url: Pinax.ajaxUrl+"updateReport",
+            success: function( data ) {
+        	    $( "#report" ).html( data );
+                $( "#report" ).show( );
+            }
+	    });
+    }
+});
+]]></pnx:JSscript> -->
+<pnx:JSscript><![CDATA[
+$(document).ready(function(){
+  $('button.delete-exp-files').click(function(e) {
+    var id = $(this).attr('id').split('_')[1];
+    $.ajax({
+      type: "POST",
+      url: Pinax.ajaxUrl+"deleteFilesExport",
+      dataType: 'json',
+      data: {
+        id: id
+      },
+      success: function( data ) {
+        location.href = Pinax.baseUrl + "/metafad.jobsReport"
+      }
+    });
+  });    
+});
+]]></pnx:JSscript>
+    </mvc:State>
+
+</mvc:Page>

@@ -1,0 +1,45 @@
+{
+    "name": "icariccu/metafad-sdk",
+    "description": "metaFAD - SDK",
+    "license": "BSD 3-Clause",
+    "type": "module",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/ICARICCU/Pinax"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/chrisboulton/php-diff"
+        }
+    ],
+    "require": {
+        "chrisboulton/php-diff": "dev-master",
+        "icariccu/pinax-2": "dev-main",
+        "ramsey/uuid": "^3.7"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^0.12.64",
+        "vimeo/psalm": "^4.3"
+    },
+    "autoload": {
+        "psr-0": {}
+    },
+    "scripts": {
+        "phpstan": [
+            "phpstan analyse --memory-limit 1G -c phpstan.neon"
+        ],
+        "psalm": [
+            "psalm"
+        ],
+        "psalm-nocache": [
+            "psalm --clear-global-cache",
+            "psalm --clear-cache",
+            "psalm"
+        ],
+        "quality-test": [
+            "@phpstan",
+            "@psalm"
+        ]
+    }
+}

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:iccd="metafad.iccd.views.components.*"
+    xmlns:com="metafad.common.views.components.*"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    id="Page"
+    controllerName="metafad.exporter.controllers.*"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Page.php"
+    defaultAction="export">
+
+    <pnx:templateDefine name="model" required="true" />
+    <pnx:templateDefine name="grid_fields" required="true" />
+    <pnx:templateDefine name="primary_key" required="false" defaultValue="document_id" />
+    <pnx:templateDefine name="documentRenderCell" required="false" defaultValue="metafad.common.views.renderer.CellEditDraftDelete" />
+    <pnx:templateDefine name="filterByInstitute" defaultValue="true" />
+    <pnx:templateDefine name="autocompleteController" required="false" defaultValue="" />
+
+    <pnx:Import src="_common.xml" />
+
+    <mvc:State name="index,export">
+        <com:DataGridSolr id="dataGridExport" enableSorting="true" filterByInstitute="##filterByInstitute##" setLastSearch="true"
+                          recordClassName="##model##" cssClass="table table-bordered table-striped" fullTextSearch="true" keyAndLabel="true"
+                          autocompleteController="##autocompleteController##">
+            <pnx:DataGridColumn columnName="##primary_key##" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.SelectionFlag" width="20px" checkboxSelectAll="true" checkboxSelectPage="true"/>
+            ##grid_fields##
+            <pnx:DataGridColumn columnName="##primary_key##" sortable="false" searchable="false" cssClass="actions" renderCell="##documentRenderCell##" />
+        </com:DataGridSolr>
+
+        <iccd:FormEdit id="exportForm" newCode="true">
+          <pnx:Panel cssClass="export-option">
+            <pnx:Panel cssClass="export-option-checkbox">
+              <pnx:Input id="exportAll" type="checkbox" value="exportAll" label="Esporta risultato della ricerca" cssClassLabel="" applyFormItemTemplate="false"/>
+            </pnx:Panel>
+            <pnx:Panel cssClass="export-option-checkbox">
+              <pnx:Input id="exportSelected" type="checkbox" value="exportSelected" label="Esporta record selezionati" cssClassLabel="" applyFormItemTemplate="false"/>
+            </pnx:Panel>
+            <pnx:Panel cssClass="export-option-checkbox">
+              <pnx:Input id="exportAutBib" type="checkbox" value="exportAutBib" label="Esporta schede AUT e BIB associate" cssClassLabel="" applyFormItemTemplate="false"/>
+            </pnx:Panel>
+          </pnx:Panel>
+          <pnx:Panel id="countSelected" />
+          <pnx:Input id="exportTitle" cssClass="form-control" label="Titolo esportazione" required="true"/>
+          <pnx:Hidden id="ids" />
+          <pnx:List id="exportFormat" cssClass="form-control" label="{i18n:Formato esportazione}" >
+              <pnx:ListItem key="trc" value="ICCD 92"/>
+              <pnx:ListItem key="iccdxml" value="ICCD XML"/>
+          </pnx:List>
+          
+          <pnx:Input id="exportEmail" cssClass="form-control" label="Email di notifica"/>
+          <pnx:Panel cssClass="export-mag-email-message col-sm-offset-3 col-sm-10 col-xs-12"><pnx:Text text="{i18n:exportEmail}"></pnx:Text></pnx:Panel>
+          <pnx:HtmlButton label="{i18n:Esporta}" name="action" id="action" cssClass="btn btn-flat btn-info btn-export-mag"/>  
+        </iccd:FormEdit>
+        <pnx:JSscript folder="metafad/gestioneDati/boards/js" />
+    </mvc:State>
+
+    <mvc:State name="edit,editDraft" url="linkEdit" controllerName="metafad.common.controllers.RedirectFromExport">
+    </mvc:State>
+    
+    <mvc:State name="delete" controllerName="metafad.common.controllers.RedirectFromExport">
+    </mvc:State>
+</mvc:Page>

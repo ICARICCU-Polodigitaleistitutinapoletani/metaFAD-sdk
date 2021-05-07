@@ -1,0 +1,11 @@
+{
+    "id": {
+        "xpath": "./unitid[@localtype='metaFAD']"
+    },
+    "daoSingle": {
+        "xpath": "//did/dao"
+    },
+    "level": {
+        "xpath": "./@level"
+    }
+}

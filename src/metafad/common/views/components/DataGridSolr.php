@@ -1,0 +1,335 @@
+<?php
+class metafad_common_views_components_DataGridSolr extends metafad_common_views_components_DataGridSolrBase
+{
+    function init()
+    {
+        // call the superclass for validate the attributes
+        $this->defineAttribute('setLastSearch', false, false, COMPONENT_TYPE_BOOLEAN);
+        $this->defineAttribute('showTemplates', false, true, COMPONENT_TYPE_BOOLEAN);
+        parent::init();
+    }
+
+    protected function quoteValue($value)
+    {
+        return ($value == '*') ? $value : '"' . $value . '"';
+    }
+
+    public function getAjaxUrl()
+    {
+        $ajaxUrl = parent::getAjaxUrl();
+
+        if ($this->getAttribute('parent')) {
+            $ajaxUrl .= '&parent=' . $this->getAttribute('parent');
+        }
+
+        return $ajaxUrl;
+    }
+
+    protected function getSolrResponse()
+    {
+        $length = $_GET["iDisplayLength"];
+        $start = $_GET["iDisplayStart"];
+
+        if ($pos = strpos($_SERVER['HTTP_REFERER'], 'listDetail')) {
+            $idValue = intval(substr_replace($_SERVER['HTTP_REFERER'], '', 0, $pos + 11));
+        }
+
+        $sSearch = __Request::get('sSearch');
+
+        $aColumns = array();
+
+        foreach ($this->columns as $column) {
+            if (!in_array($column['columnName'], $aColumns)) {
+                $aColumns[] = $column['columnName'];
+            }
+        }
+
+        for ($i = 0; $i < count($aColumns); $i++) {
+            if (__Request::get('sSearch_' . $i)) {
+                $filters[$aColumns[$i]] = __Request::get('sSearch_' . $i);
+            }
+        }
+
+        $q = array();
+        $searchQuery = array();
+
+        list($searchFields, $modelQuery) = $this->getSearchFields(true);
+
+        if ($searchFields) {
+            foreach ($searchFields as $field) {
+                if(is_string($field))
+                {
+                    if ($decodeValue = json_decode($field)) {
+                        $field = $decodeValue->value;
+                    }
+                }
+                if (is_array($field)) {
+                    $type = $field['type'];
+                    $label = $field['label'];
+                    $field = $field['field'];
+                }
+
+                $value = __Request::get($field);
+                if ($value) {
+                    $this->setAttribute('onlyRoots', false);
+
+                    if ($type == 'date' || $type == 'dateCentury') {
+                        $f = explode(',', $field);
+                        $v = explode(',', $value);
+
+                        if ($type = 'dateCentury') {
+                            $romanService = pinax_ObjectFactory::createObject('metafad.common.helpers.RomanService');
+                            $v[0] = $romanService->romanToInteger($v[0]);
+                            $v[1] = $romanService->romanToInteger($v[1]);
+                        }
+
+                        if ($v[0]) {
+                            $q[] = '(' . $f[0] . ':[' . sprintf('%04d', $v[0]) . ' TO *])';
+                        }
+
+                        if ($v[1]) {
+                            $q[] = '(' . $f[1] . ':[* TO ' . sprintf('%04d', $v[1]) . '])';
+                        }
+                    } else {
+                        if (is_array($value)) {
+                            foreach ($value as $v) {
+                                $q[] = '(' . $field . ':' . $this->quoteValue($v) . ')';
+                            }
+                        } else {
+
+                            $poswildcard = strpos($value,'*');
+                            if( $poswildcard!==false && strlen($value)>2 ){
+
+
+
+                                $q[] = '(' . $field . ':' . $value . ')';
+                            }
+                            else
+                                $q[] = '(' . $field . ':' . $this->quoteValue($value) . ')';
+
+                        }
+
+                        if ($field == 'livelloDiDescrizione_s') {
+                            $typeSet = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($sSearch && empty($q)) {
+            $q[] = '(' . $sSearch . ')';
+        }
+
+        if (!$this->getAttribute('ignoreTypeFilter')) {
+            $q[] = $modelQuery;
+        }
+
+        if ($this->issetAttribute('type')) {
+            $q[] = 'livelloDiDescrizione_s:"' . $this->getAttribute('type') . '"';
+        }
+
+        if ($this->issetAttribute('onlyRoots')) {
+            $q[] = "-parent_i:*";
+        }
+
+        if ($this->getAttribute('hasDigital')) {
+            $q[] = "digitale_i:1";
+        }
+
+        if (__Request::get('parent')) {
+            $q[] = 'parent_i:"'.__Request::get('parent').'"';
+        }
+
+        if (!$this->getAttribute('showTemplates') && __Request::get('isTemplate_i') != 1) {
+            $q[] = '-isTemplate_i:"1"';
+        }
+
+        $curInstituteKey = metafad_usersAndPermissions_Common::getInstituteKey();
+        if ($this->getAttribute('filterByInstitute') && $curInstituteKey && $curInstituteKey != "*") {
+            $q[] = '(instituteKey_s:"'.$curInstituteKey.'")';
+        }
+
+        $sortField = 'document_id';
+
+        if ( __Request::exists('iSortCol_0') ) {
+            $iSortingCols = intval( __Request::get( 'iSortingCols' ));
+            for ( $i=0 ; $i<$iSortingCols ; $i++ ) {
+                $sortCol = intval( __Request::get('iSortCol_'.$i));
+                if ( __Request::get( 'bSortable_'.$sortCol ) == "true" ) {
+                    $sortField = $aColumns[$sortCol];
+                    break;
+                }
+            }
+        }
+
+        // i campi _t non sono ordinabili
+        if (preg_match('/_t$/', $sortField) || $sortField == 'document_id') {
+            $sort = 'updated_at_s desc, id asc';
+        } else {
+            $sort = $sortField . ' ' . __Request::get('sSortDir_0', 'asc') . ", updated_at_s desc";
+        }
+
+        $searchQuery['indent'] = 'on';
+        $searchQuery['wt'] = 'json';
+        $searchQuery['sort'] = $sort;
+        $searchQuery['q'] = implode(' AND ', $q);
+        $searchQuery['fq'] = array();
+        $searchQuery['start'] = $start;
+        $searchQuery['rows'] = ($length)?:10;
+        $searchQuery['json.nl'] = 'map';
+
+        //Multilingua
+        if($this->getAttribute('multiLanguage') && metafad_common_helpers_LanguageHelper::checkLanguage($this->getAttribute('recordClassName')))
+        {
+            $languagePrefix = $this->_application->getEditingLanguage();
+            $searchQuery['fq'][] = 'language_s:"'. $languagePrefix.'"';
+        }
+
+		//Faccette per autocomplete
+		list($searchFields) = $this->getSearchFields();
+		$facetFields = explode(',',implode(',',$searchFields));
+		$searchQuery['facet.field'] = $facetFields;
+		$searchQuery['facet'] = 'true';
+
+        $queryString = self::buildHttpQuery($searchQuery);
+
+        $request = pinax_ObjectFactory::createObject('pinax.rest.core.RestRequest',
+            __Config::get('metafad.solr.url') . 'select?'.$queryString);
+        $request->setTimeout(1000);
+        $request->setAcceptType('application/json');
+        $request->execute();
+
+        if($this->getAttribute('setLastSearch'))
+        {
+          $numFound = json_decode($request->getResponseBody())->response->numFound;
+          __Session::set('lastSearch',array('search'=>__Config::get('metafad.solr.url').'select?'.$queryString,'numFound'=>$numFound));
+        }
+
+        if ($request->execute()) {
+			$responseBody = json_decode($request->getResponseBody());
+            return $responseBody;
+        } else {
+            return null;
+        }
+    }
+
+    protected function processSolrResponse($solrResponse)
+    {
+        $aColumns = array();
+        $aaData = array();
+        try {
+            foreach ($solrResponse->response->docs as $row) {
+                $rowToInsert = array();
+
+                foreach ($this->columns as $column) {
+                    if ($column['acl']) {
+                        if (!$this->_user->acl($column['acl']['service'], $column['acl']['action'])) {
+                            continue;
+                        }
+                    }
+
+                    $columnName = $column['columnName'];
+                    $columnRenderCell = $column['renderCell'];
+
+                    $value = (is_string($row->$columnName)) ? htmlspecialchars($row->$columnName) : $row->$columnName;
+
+                    if ($columnRenderCell) {
+                        if (!is_object($columnRenderCell)) {
+                            $columnRenderCell = pinax_ObjectFactory::createObject($columnRenderCell, $this->_application);
+                        }
+
+                        if (is_object($columnRenderCell)) {
+                            if ($columnName != 'document_detail_status'){
+                                if (method_exists($columnRenderCell, 'setRecordDocument')) {
+                                    $columnRenderCell->setRecordDocument($row);
+                                }
+                                $value = $columnRenderCell->renderCell($row->id, $value, json_decode($row->doc_store[0]), $columnName);
+                            } else{
+                                if ($row->doc_store) {
+                                    $value = $columnRenderCell->renderCell($row->id, json_decode($row->doc_store[0])->document_detail_status, json_decode($row->doc_store[0]), $columnName);
+                                }
+                            }
+                        }
+                    }
+
+                    if (is_object($value)) {
+                        $value = json_encode($value);
+                    }
+                    $rowToInsert[] = $value;
+                }
+                $aaData[] = $rowToInsert;
+
+            }
+        } catch (Exception $e) {
+            var_dump($e);
+        }
+
+        if ($this->getAttribute('dbDebug')) {
+            pinax_dataAccessDoctrine_DataAccess::disableLogging();
+            die;
+        }
+
+        $facets = array();
+
+        if ($solrResponse->facet_counts->facet_fields) {
+            $facets = $this->getFacetsValues($solrResponse->facet_counts->facet_fields);
+        }
+
+        $output = array(
+            "sEcho" => intval(__Request::get('sEcho')),
+            "iTotalRecords" => $solrResponse->response->numFound,
+            "iTotalDisplayRecords" => $solrResponse->response->numFound,
+            "aaData" => $aaData,
+			"facets" => $facets
+        );
+
+        return $output;
+    }
+
+    public function process_ajax()
+    {
+        $solrResponse = $this->getSolrResponse();
+        if (!$solrResponse) {
+            $facets = array();
+
+            if ($solrResponse->facet_counts->facet_fields) {
+                $facets = $this->getFacetsValues($solrResponse->facet_counts->facet_fields);
+            }
+
+            $output = array(
+                "sEcho" => intval(__Request::get('sEcho')),
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" => '',
+				"facets" => $facets
+            );
+            return $output;
+        }
+
+        $output = $this->processSolrResponse($solrResponse);
+
+        return $output;
+    }
+
+	//Estraggo faccette per autocomplete
+	private function getFacetsValues($facets)
+	{
+		$facetsArray = array();
+		foreach($facets as $k => $v)
+		{
+			foreach ($v as $val => $count) {
+				if($count > 0)
+				{
+					$facetsArray[$k][] = $val;
+				}
+			}
+		}
+		return $facetsArray;
+	}
+
+	public function setColumnAttribute($i, $attribute, $text)
+	{
+	    $this->columns[$i][$attribute] = $text;
+	}
+}

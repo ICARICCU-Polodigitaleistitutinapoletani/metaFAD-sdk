@@ -1,0 +1,600 @@
+{
+  "pageId": {
+    "type": "constant",
+    "value": "archivi-complessoarchivistico"
+  },
+  "codiceIdentificativoPrecedente": {
+    "type": "composite",
+    "repeatable": true,
+    "xpath": [
+      "./did/unitid[@identifier]/text()"
+    ],
+    "struct": {
+      "codice": {
+        "type": "simple",
+        "xpath": "."
+      }
+    },
+    "commenti generali": "L'ordine delle funzioni è JOIN > SOLVE > TRANSFORM",
+    "commenti sul joiner": "Il joiner è default, ovvero fa il merging degli array, in caso di multipli",
+    "commenti sul solver": "Il solver è default, ovvero si prende la prima occorrenza di eventuali valori multipli",
+    "transform": {
+      "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+    }
+  },
+  "altriCodiciIdentificativi": {
+    "type": "composite",
+    "repeatable": true,
+    "xpath": [
+      "./did/unitid[not(@localtype)]"
+    ],
+    "struct": {
+      "codice": {
+        "type": "simple",
+        "xpath": "./text()"
+      },
+      "qualifica": {
+        "type": "simple",
+        "xpath": "./@label"
+      }
+    },
+    "transform": {
+      "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+    }
+  },
+  "denominazione": {
+    "commento per mappatura standard (senza attributi personalizzati ICAR)": "sostituire l'xpath con ./did/unittitle[not(@*)]/text(). Ma se ci fosse più di un tag?",
+    "type": "simple",
+    "xpath": "./did/unittitle[@localtype='denominazione']/text()",
+    "trim": "advanced"
+  },
+  "altraDenominazione": {
+    "commento per mappatura standard (senza attributi personalizzati ICAR)": "Andrebbe eliminato in EAD3 senza personalizzazioni",
+    "type": "composite",
+    "xpath": "./did/unittitle[@localtype='altreDenominazioni'] | ./did/unittitle[@localtype='denominazioneParallela']",
+    "repeatable": true,
+    "transform": {
+      "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+    },
+    "struct": {
+      "altreDenominazioni_denominazione": {
+        "type": "simple",
+        "xpath": "./text()"
+      },
+      "altreDenominazioni_qualifica": {
+        "type": "simple",
+        "xpath": "./@localtype"
+      }
+    }
+  },
+  "cronologia": {
+    "type": "composite",
+    "repeatable": true,
+    "xpath": [
+      "./did/unitdatestructured",
+      "./did/unitdatestructured/dateset/daterange",
+      "./did/unitdatestructured/dateset/datesingle[not(@localtype)]"
+    ],
+    "transform": {
+      "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+    },
+    "struct": {
+      "estremoRemoto_data": {
+        "type": "simple",
+        "xpath": [
+          "./datesingle/@standarddate",
+          "./daterange/fromdate/@standarddate",
+          "./fromdate/@standarddate",
+          "./@standarddate"
+        ],
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CronologiaManager",
+          "params": {
+            "fieldType": "DATA_PUNTUALE"
+          }
+        }
+      },
+      "estremoRemoto_codificaData": {
+        "type": "simple",
+        "xpath": [
+          "./datesingle/@standarddate",
+          "./daterange/fromdate/@standarddate",
+          "./fromdate/@standarddate",
+          "./@standarddate"
+        ],
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CronologiaManager",
+          "params": {
+            "fieldType": "DATA_PUNTUALE_CODIFICA"
+          }
+        }
+      },
+      "estremoRecente_data": {
+        "type": "simple",
+        "xpath": [
+          "./datesingle/@standarddate",
+          "./daterange/todate/@standarddate",
+          "./todate/@standarddate",
+          "./@standarddate"
+        ],
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CronologiaManager",
+          "params": {
+            "fieldType": "DATA_PUNTUALE"
+          }
+        }
+      },
+      "estremoRecente_codificaData": {
+        "type": "simple",
+        "xpath": [
+          "./datesingle/@standarddate",
+          "./daterange/todate/@standarddate",
+          "./todate/@standarddate",
+          "./@standarddate"
+        ],
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CronologiaManager",
+          "params": {
+            "fieldType": "DATA_PUNTUALE_CODIFICA"
+          }
+        }
+      },
+      "estremoRemoto_secolo": {
+        "type": "simple",
+        "xpath": [
+          "./datesingle/@notbefore",
+          "./daterange/fromdate/@notbefore",
+          "./fromdate/@notbefore",
+          "./@notbefore"
+        ],
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CronologiaManager",
+          "params": {
+            "fieldType": "DATA_SECOLARE"
+          }
+        }
+      },
+      "estremoRecente_secolo": {
+        "type": "simple",
+        "xpath": [
+          "./datesingle/@notafter",
+          "./daterange/todate/@notafter",
+          "./todate/@notafter",
+          "./@notafter"
+        ],
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CronologiaManager",
+          "params": {
+            "fieldType": "DATA_SECOLARE"
+          }
+        }
+      },
+      "estremoRemoto_specifica": {
+        "type": "simple",
+        "xpath": [
+          "./datesingle/@notbefore",
+          "./datesingle/@notafter",
+          "./daterange/fromdate/@notbefore",
+          "./daterange/fromdate/@notafter",
+          "./fromdate/@notbefore",
+          "./fromdate/@notafter",
+          "./@notbefore",
+          "./@notafter"
+        ],
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CronologiaManager",
+          "params": {
+            "fieldType": "SECOLO_SPECIFICA"
+          },
+          "escapeSolver": true
+        }
+      },
+      "estremoRecente_specifica": {
+        "type": "simple",
+        "xpath": [
+          "./datesingle/@notbefore",
+          "./datesingle/@notafter",
+          "./daterange/todate/@notbefore",
+          "./daterange/todate/@notafter",
+          "./todate/@notbefore",
+          "./todate/@notafter",
+          "./@notbefore",
+          "./@notafter"
+        ],
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CronologiaManager",
+          "params": {
+            "fieldType": "SECOLO_SPECIFICA"
+          },
+          "escapeSolver": true
+        }
+      },
+      "notaDatazione": {
+        "type": "simple",
+        "xpath": [
+          "../daterange/datesingle[@localtype='noteAllaData']/text()",
+          "../datesingle[@localtype='noteAllaData']/text()"
+        ]
+      },
+      "estremoRemoto_validita": {
+        "type": "simple",
+        "xpath": "./@certainty",
+        "vocabulary": "validita"
+      }
+    }
+  },
+  "cronologiaDiplomatico": {
+    "type": "composite",
+    "repeatable": true,
+    "institute": "diplomatico-firenze",
+    "xpath": "./did/unitdatestructured",
+    "transform": {
+      "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+    },
+    "struct": {
+      "estremoRemoto_data": {
+        "type": "simple",
+        "xpath": "./datesingle[@notbefore and not(@notafter)]/@notbefore",
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CronologiaManager",
+          "params": {
+            "fieldType": "DATA_PUNTUALE"
+          }
+        }
+      },
+      "estremoRemoto_codificaData": {
+        "type": "simple",
+        "xpath": "./datesingle[@notbefore and not(@notafter)]/@notbefore",
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CronologiaManager",
+          "params": {
+            "fieldType": "DATA_PUNTUALE_CODIFICA"
+          }
+        }
+      },
+      "estremoRecente_data": {
+        "type": "simple",
+        "xpath": "./datesingle[@notafter and not(@notbefore)]/@notafter",
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CronologiaManager",
+          "params": {
+            "fieldType": "DATA_PUNTUALE"
+          }
+        }
+      },
+      "estremoRecente_codificaData": {
+        "type": "simple",
+        "xpath": "./datesingle[@notafter and not(@notbefore)]/@notafter",
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CronologiaManager",
+          "params": {
+            "fieldType": "DATA_PUNTUALE_CODIFICA"
+          }
+        }
+      }
+    }
+  },
+  "consistenza": {
+    "type": "composite",
+    "xpath": "./did/physdescstructured[@physdescstructuredtype='materialtype'] | ./did/physdescset/physdescstructured[@physdescstructuredtype='materialtype']",
+    "repeatable": true,
+    "transform": {
+      "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+    },
+    "struct": {
+      "quantita": {
+        "type": "simple",
+        "xpath": "./quantity/text()"
+      },
+      "tipologia": {
+        "TODO": "implementare warning se non matcha",
+        "type": "simple",
+        "xpath": "./unittype/text()",
+        "solver": {
+          "classname": "metafad_common_importer_functions_solvers_FirstToUppercase",
+          "params": {}
+      }
+      },
+      "integrazioneDescrizione": {
+        "type": "simple",
+        "xpath": "./physfacet/text() | ./descriptivenote/head | ./descriptivenote/p | ./descriptivenote/chronitem | ./descriptivenote/abstract",
+        "solver": {
+          "classname": "metafad_common_importer_functions_solvers_ArraysToString",
+          "params": {
+            "separator": " || "
+          }
+        }
+      }
+    }
+  },
+  "metriLineari": {
+    "type": "simple",
+    "xpath": "./did/physdescstructured[@physdescstructuredtype='spaceoccupied']/quantity/text() | ./did/physdescset/physdescstructured[@physdescstructuredtype='spaceoccupied']/quantity/text()"
+  },
+  "noteConsistenza": {
+    "type": "simple",
+    "xpath": "./did/physdescstructured[@physdescstructuredtype='spaceoccupied']/physfacet/text() | ./did/physdescset/physdescstructured[@physdescstructuredtype='spaceoccupied']/physfacet/text() | ./did/physdescstructured[@physdescstructuredtype='spaceoccupied']/descriptivenote/p/text()",
+    "solver": {
+      "classname": "metafad_common_importer_functions_solvers_ArraysToString",
+      "params": {
+        "separator": " || "
+      }
+    }
+  },
+  "storiaArchivistica": {
+    "type": "simple",
+    "xpath": "./custodhist/p | ./custodhist/head | ./custodhist/chronlist/chronitem | ./custodhist/abstract",
+    "solver": {
+      "classname": "metafad_common_importer_functions_solvers_ArraysToString",
+      "params": {
+        "separator": " || "
+      }
+    }
+  },
+  "descrizioneContenuto": {
+    "type": "simple",
+    "xpath": "./scopecontent/p | ./scopecontent/head | ./scopecontent/chronlist/chronitem | ./scopecontent/abstract",
+    "solver": {
+      "classname": "metafad_common_importer_functions_solvers_ArraysToString",
+      "params": {
+        "separator": " || "
+      }
+    }
+  },
+  "criteriOrdinamento": {
+    "type": "simple",
+    "xpath": "./arrangement/p | ./arrangement/head | ./arrangement/chronlist/chronitem | ./arrangement/abstract",
+    "solver": {
+      "classname": "metafad_common_importer_functions_solvers_ArraysToString",
+      "params": {
+        "separator": " || "
+      }
+    }
+  },
+  "condizioniAccesso": {
+    "type": "simple",
+    "xpath": "./accessrestrict/p | ./accessrestrict/head | ./accessrestrict/chronlist/chronitem | ./accessrestrict/abstract",
+    "solver": {
+      "classname": "metafad_common_importer_functions_solvers_ArraysToString",
+      "params": {
+        "separator": " || "
+      }
+    }
+  },
+  "documentazioneArchivioCollegata": {
+    "type": "composite",
+    "xpath": "./relatedmaterial/archref/ref",
+    "repeatable": true,
+    "transform": {
+      "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+    },
+    "struct": {
+      "denominazione": {
+        "type": "simple",
+        "xpath": "./text()"
+      },
+      "url": {
+        "type": "simple",
+        "xpath": "./@href"
+      },
+      "localizzazioneSegnatura": {
+        "type": "simple",
+        "xpath": "./@target"
+      }
+    }
+  },
+  "riferimentiWeb": {
+    "type": "composite",
+    "xpath": "./relations/relation[@otherrelationtype='URL']",
+    "repeatable": true,
+    "transform": {
+      "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+    },
+    "struct": {
+      "descrizione": {
+        "type": "simple",
+        "xpath": "./relationentry/text()"
+      },
+      "url": {
+        "type": "simple",
+        "xpath": "./@href"
+      }
+    }
+  },
+  "produttori": {
+    "type": "composite",
+    "xpath": "./did/origination/corpname/@identifier | ./did/origination/famname/@identifier | ./did/origination/persname/@identifier",
+    "repeatable": true,
+    "struct": {
+      "soggettoProduttore": {
+        "type": "composite",
+        "xpath": ".",
+        "struct": {
+          "externalID": {
+            "type": "simple",
+            "xpath": "."
+          }
+        },
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CreateExternalLink",
+          "params": {
+            "model": "archivi.models.ProduttoreConservatore",
+            "pageId": "archivi-produttoreconservatore",
+            "function": "createProduttoreConservatore"
+          }
+        }
+      }
+    }
+  },
+  "strumentiRicerca": {
+    "type": "composite",
+    "xpath": "./otherfindaid/archref",
+    "repeatable": true,
+    "struct": {
+      "linkStrumentiRicerca": {
+        "type": "composite",
+        "xpath": ".",
+        "struct": {
+          "externalID": {
+            "type": "simple",
+            "xpath": "./ref/@target | ./ref/text() | ./text()"
+          },
+          "externalID2": {
+            "type": "simple",
+            "xpath": "./ref/@href"
+          }
+        },
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CreateExternalLink",
+          "params": {
+            "model": "archivi.models.SchedaStrumentoRicerca",
+            "pageId": "archivi-schedastrumentoricerca",
+            "function": "createStrumentoRicerca"
+          }
+        }
+      }
+    }
+  },
+  "soggettoConservatore": {
+    "type": "composite",
+    "xpath": "./did/repository/corpname/@identifier | ./did/repository/famname/@identifier | ./did/repository/persname/@identifier",
+    "struct": {
+      "externalID": {
+        "type": "simple",
+        "xpath": "."
+      }
+    },
+    "transform": {
+      "classname": "metafad_common_importer_functions_transformers_CreateExternalLink",
+      "params": {
+        "model": "archivi.models.ProduttoreConservatore",
+        "pageId": "archivi-produttoreconservatore",
+        "function": "createProduttoreConservatore"
+      }
+    }
+  },
+  "riferimentiBibliografici": {
+    "TODO": "Ogni otherrelationtype è a sé?",
+    "type": "composite",
+    "xpath": "./relations/relation[@otherrelationtype='BIBTEXT'] | ./relations/relation[@otherrelationtype='BIBSBN'] | ./relations/relation[@otherrelationtype='BIBURI']",
+    "repeatable": true,
+    "struct": {
+      "linkRiferimentiBibliografici": {
+        "type": "composite",
+        "xpath": ".",
+        "struct": {
+          "entry": {
+            "type": "simple",
+            "xpath": "./relationentry"
+          },
+          "externalID": {
+            "type": "simple",
+            "xpath": "./relationentry"
+          },
+          "type": {
+            "type": "simple",
+            "xpath": "./@otherrelationtype"
+          },
+          "href": {
+            "type": "simple",
+            "xpath": "./@href"
+          },
+          "tipologiaSpecifica": {
+            "type": "simple",
+            "xpath": [],
+            "default": "bibliografia_tipologiaSpecifica"
+          },
+          "annoDiEdizione": {
+            "type": "simple",
+            "xpath": [],
+            "default": "bibliografia_annoDiEdizione"
+          }
+        },
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CreateExternalLink",
+          "params": {
+            "model": "archivi.models.SchedaBibliografica",
+            "pageId": "archivi-schedabibliografica",
+            "function": "createSchedaBibliografica"
+          }
+        }
+      }
+    }
+  },
+  "fontiArchivistiche": {
+    "TODO": "Ogni otherrelationtype è a sé?",
+    "type": "composite",
+    "xpath": "./relations/relation[@otherrelationtype='FONTETEXT'] | ./relations/relation[@otherrelationtype='FONTEURI']",
+    "repeatable": true,
+    "struct": {
+      "linkFontiArchivistiche": {
+        "type": "composite",
+        "xpath": ".",
+        "struct": {
+          "entry": {
+            "type": "simple",
+            "xpath": "./relationentry"
+          },
+          "externalID": {
+            "type": "simple",
+            "xpath": "./relationentry"
+          },
+          "href": {
+            "type": "simple",
+            "xpath": "./@href"
+          }
+        },
+        "transform": {
+          "classname": "metafad_common_importer_functions_transformers_CreateExternalLink",
+          "params": {
+            "model": "archivi.models.FonteArchivistica",
+            "pageId": "archivi-fontearchivistica",
+            "function": "createFonteArchivistica"
+          }
+        }
+      }
+    }
+  },
+  "compilazione": {
+    "type": "composite",
+    "xpath": "./processinfo[@localtype='compilatori']/processinfo[@localtype='compilatore']/p",
+    "repeatable": true,
+    "transform": {
+      "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+    },
+    "struct": {
+      "redattore": {
+        "type": "simple",
+        "xpath": "./persname/part[@localtype='compilatore']/text()"
+      },
+      "azione": {
+        "type": "simple",
+        "xpath": "./persname/part[@localtype='tipoIntervento']/text()",
+        "vocabulary": "compilazione_azione"
+      },
+      "data": {
+        "type": "simple",
+        "xpath": "./date[@localtype='dataIntervento']"
+      },
+      "tipologiaRedattore": {
+        "type": "constant",
+        "value": "Persona"
+      }
+    }
+  },
+  "tematismo": {
+    "TODO": "eredita i valori del padre?",
+    "type": "composite",
+    "xpath": "./controlaccess/subject[@localtype='tematismoCollegato']",
+    "repeatable": true,
+    "transform": {
+      "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+    },
+    "struct": {
+      "tematismoField": {
+        "type": "simple",
+        "xpath": "./part/text()"
+      }
+    }
+  }
+}

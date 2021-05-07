@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pnx:Routing>
+    <pnx:Route method="GET" value="rest/dam/{value=instance}/bytestream/edit/{value=downloadMode}/{value=mediaId}/{value=name}/{value=parameter}" controller="metafad.dam.rest.controllers.Download"/>
+    <pnx:Route method="GET" value="rest/dam/{value=instance}/get/{value=mediaId}/{value=bytestreamName}" controller="metafad.dam.rest.controllers.Download"/>
+    <pnx:Route method="GET" value="rest/dam/{value=instance}/resize-stream/{value=mediaId}/{value=bytestreamName}/{value=newBytestreamName}" controller="metafad.dam.rest.controllers.Resize"/>
+    <pnx:Route method="GET" value="rest/dam/{value=instance}/resize/{value=mediaId}/{value=bytestreamName}" controller="metafad.dam.rest.controllers.Resize"/>
+
+    <pnx:Route method="POST" value="rest/dam/{value=instance}/upload" controller="metafad.dam.rest.controllers.Upload"/>
+
+    <pnx:Route name="damForward" value="rest/dam/.*" controller="metafad.dam.rest.controllers.Forward"/>
+</pnx:Routing>

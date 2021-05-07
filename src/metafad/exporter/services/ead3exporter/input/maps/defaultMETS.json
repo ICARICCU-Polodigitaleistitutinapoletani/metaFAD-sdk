@@ -1,0 +1,95 @@
+{
+    "##default1##": [
+        {
+            "xpath": "/mets:mets/mets:metsHdr",
+            "attribute": "CREATEDATE",
+            "hasDefault": true,
+            "utility": "generateIsoDate"
+        }
+    ],
+    "##default2##": [
+        {
+            "xpath": "/mets:mets/mets:metsHdr",
+            "attribute": "LASTMODDATE",
+            "hasDefault": true,
+            "utility": "generateIsoDate"
+        }
+    ],
+    "##default3##": [
+        {
+            "xpath": "/mets:mets/mets:metsHdr/mets:agent[@ROLE='IPOWNER']/mets:name",
+            "hasDefault": true,
+            "default": "agent_ipowner_name"
+        }
+    ],
+    "##default4##": [
+        {
+            "xpath": "/mets:mets/mets:metsHdr/mets:agent[@ROLE='OTHER']/mets:name",
+            "hasDefault": true,
+            "default": "agent_other_name"
+        }
+    ],
+    "##default5##": [
+        {
+            "xpath": "/mets:mets/mets:metsHdr/mets:agent[@ROLE='CREATOR']/mets:name",
+            "hasDefault": true,
+            "default": "agent_creator_name"
+        }
+    ],
+    "##default6##": {
+        "xpath": "/mets:mets/mets:amdSec/mets:rightsMD",
+        "objectRoot": "mets:rightsMD",
+        "defaultRoot": "rightsMD",
+        "hasDefault": true,
+        "object": [
+            {
+                "field": "id",
+                "xpath": ".",
+                "attribute": "ID",
+                "constant": "MD001"
+            },
+            {
+                "field": "mdwrap",
+                "xpath": "./mets:mdWrap",
+                "hasDefault": true,
+                "attribute": "MDTYPE",
+                "constant": "METSRIGHTS"
+            },
+            {
+                "field": "mdwrap",
+                "xpath": "./mets:mdWrap",
+                "hasDefault": true,
+                "attribute": "MIMETYPE",
+                "constant": "text/xml",
+                "notCreateNewNodeIfExists": true
+
+            },
+            {
+                "field": "mdwrap",
+                "xpath": "./mets:mdWrap",
+                "hasDefault": true,
+                "attribute": "LABEL",
+                "default": "rightsMD#label",
+                "notCreateNewNodeIfExists": true
+            },
+            {
+                "field": "xmldata",
+                "xpath": "./mets:mdWrap/mets:xmlData/metsrights:RightsDeclarationMD",
+                "hasDefault": true,
+                "attribute": "RIGHTSCATEGORY",
+                "default": "rightsMD#rightsCategory",
+                "notCreateNewNodeIfExists": true,
+                "newNodeDeep": 2
+            },
+            {
+                "field": "rightsfoldername",
+                "xpath": "./mets:mdWrap/mets:xmlData/metsrights:RightsDeclarationMD/metsrights:RightsHolder/metsrights:RightsHolderName",
+                "hasDefault": true,
+                "default": "rightsMD#rightsFolderName",
+                "notCreateNewNodeIfExists": true,
+                "newNodeDeep": 4
+
+            }
+        ]
+    }
+}

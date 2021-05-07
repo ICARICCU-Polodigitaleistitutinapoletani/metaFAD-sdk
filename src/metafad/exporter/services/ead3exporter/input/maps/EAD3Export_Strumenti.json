@@ -1,0 +1,271 @@
+{
+    "identificativo": [
+        {
+            "xpath": "/ead:ead/ead:control/ead:recordid",
+            "utility": "charsSubstitute",
+            "utilityParams": {
+                "charsToReplace": " ",
+                "newChar": "_"
+            }
+        }
+    ],
+    "codiceIdentificativoPrecedente": {
+        "xpath": "/ead:ead/ead:control/ead:otherrecordid[@localtype='Codice']",
+        "objectRoot": "ead:otherrecordid",
+        "insertBefore": [
+            "representation", "filedesc"
+        ],
+        "object": [
+            {
+                "field": "codice",
+                "xpath": "."
+            }
+        ]
+    },
+    "riferimentiWeb": {
+        "xpath": "/ead:ead/ead:control/ead:representation",
+        "objectRoot": "ead:representation",
+        "insertBefore": [
+            "filedesc"
+        ],
+        "object": [
+            {
+                "field": "url",
+                "xpath": "."
+            },
+            {
+                "field": "denominazioneSitoWeb",
+                "xpath": ".",
+                "notCreateNewNodeIfExists": true
+            },
+            {
+                "field": "descrizione",
+                "xpath": ".",
+                "notCreateNewNodeIfExists": true
+            },
+            {
+                "field": "url",
+                "xpath": ".",
+                "attribute": "href",
+                "notCreateNewNodeIfExists": true
+            }
+        ]
+    },
+    "titoloNormalizzato": [
+        {
+            "xpath": "/ead:ead/ead:control/ead:filedesc/ead:titlestmt/ead:titleproper"
+        }
+    ],
+    "titoloOriginaleStrumento": [
+        {
+            "xpath": "/ead:ead/ead:control/ead:filedesc/ead:titlestmt/ead:titleproper[@localtype='original']"
+        }
+    ],
+    "tipologiaScelta": [
+        {
+            "xpath": "/ead:ead/ead:control/ead:filedesc/ead:editionstmt/ead:edition[@localtype='typology']"
+        }
+    ],
+    "tipoSupporto": [
+        {
+            "xpath": "/ead:ead/ead:control/ead:filedesc/ead:editionstmt/ead:edition[@localtype='support']"
+        }
+    ],
+    "edito": [
+        {
+            "xpath": "/ead:ead/ead:control/ead:filedesc/ead:editionstmt/ead:edition[@localtype='published']"
+        }
+    ],
+    "modalitaRedazioneScelta": [
+        {
+            "xpath": "/ead:ead/ead:control/ead:filedesc/ead:editionstmt/ead:edition[@localtype='tipologia']"
+        }
+    ],
+    "specificazioneModalita": [
+        {
+            "xpath": "/ead:ead/ead:control/ead:filedesc/ead:editionstmt/ead:edition[@localtype='specificazione']"
+        }
+    ],
+    "cronologiaRedazione": {
+        "TODO": "ORDINARE SPECIFICA E VALIDITà in presave (uno a uno, non prima tutte le date e poi validità e specifica)",
+        "xpath": "/ead:ead/ead:control/ead:filedesc/ead:publicationstmt/ead:date",
+        "objectRoot": "ead:date",
+        "cronologiaPurge": true,
+        "object": [
+            {
+                "field": ".",
+                "xpath": ".",
+                "attribute": "normal",
+                "extractor": [
+                    "extractOtherDate"
+                ]
+            },
+            {
+                "field": ".",
+                "xpath": ".",
+                "attribute": "localtype",
+                "extractor": [
+                    "extractType"
+                ]
+            }
+        ]
+    },
+    "cronologiaRedazione#": {
+        "xpath": "/ead:ead/ead:control/ead:filedesc/ead:publicationstmt/ead:date[@localtype='certainty']",
+        "objectRoot": "ead:date",
+        "purgeIfEmpty": true,
+        "purgeField": "estremoRemoto_validita",
+        "object": [
+            {
+                "field": ".",
+                "xpath": ".",
+                "extractor": [
+                    "extractValidita"
+                ]
+            }
+        ]
+    },
+    "cronologiaRedazione##": {
+        "xpath": "/ead:ead/ead:control/ead:filedesc/ead:publicationstmt/ead:date[@localtype='specificaDellaData']",
+        "objectRoot": "ead:date",
+        "purgeIfEmpty": true,
+        "purgeField": "estremoRemoto_specifica",
+        "object": [
+            {
+                "field": ".",
+                "xpath": ".",
+                "extractor": [
+                    "extractSpecificaSec"
+                ]
+            }
+        ]
+    },
+    "consistenzaPaginazioneLegatura": [
+        {
+            "xpath": "/ead:ead/ead:control/ead:filedesc/ead:notestmt/ead:controlnote/ead:p"
+        }
+    ],
+    "noteStoricoRelazionali": [
+        {
+            "xpath": "/ead:ead/ead:control/ead:filedesc/ead:notestmt/ead:controlnote[@localtype='noteStoriche']/ead:p"
+        }
+    ],
+    "descIntrinseca": [
+        {
+            "xpath": "/ead:ead/ead:control/ead:filedesc/ead:notestmt/ead:controlnote[@localtype='descrizioneIntrinseca']/ead:p"
+        }
+    ],
+    "autoreStrumentoRicerca": {
+        "xpath": "/ead:ead/ead:control/ead:filedesc/ead:titlestmt/ead:author",
+        "objectRoot": "ead:author",
+        "object": [
+            {
+                "field": ".",
+                "xpath": ".",
+                "utility": "autoreStrumento"
+            },
+            {
+                "field": "qualificaRuolo",
+                "xpath": ".",
+                "attribute": "localtype",
+                "utility": "strlower"
+            }
+        ]
+    },
+    "complessoArchivistico": {
+        "xpath": "/ead:ead/ead:control/ead:localcontrol[@localtype='complArchCollegato']",
+        "objectRoot": "ead:localcontrol",
+        "insertBefore": ["maintenancehistory"],
+        "object": [
+            {
+                "field": "complessoArchivisticoLink",
+                "xpath": "./ead:term",
+                "attribute": "identifier",
+                "extractor": [
+                    "extractComplessoId"
+                ]
+            },
+            {
+                "field": "complessoArchivisticoLink",
+                "xpath": "./ead:term",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractComplessoDen"
+                ]
+            }
+        ]
+    },
+    "complessoArchivistico#": {
+        "TODO": "inserire link FE",
+        "xpath": "/ead:ead/ead:archdesc",
+        "notCreateNewNodeIfExists": true,
+        "objectRoot": "ead:archdesc",
+        "object": [
+            {
+                "field": "complessoArchivisticoLink",
+                "xpath": ".",
+                "attribute": "level",
+                "extractor": [
+                    "extractComplessoLevel"
+                ]
+            }
+        ]
+    },
+    "compilazione": {
+        "xpath": "/ead:ead/ead:control/ead:maintenancehistory/ead:maintenanceevent",
+        "objectRoot": "ead:maintenanceevent",
+        "defaultRoot": "compilazione",
+        "object": [
+            {
+                "field": "azione",
+                "xpath": "./ead:eventtype",
+                "attribute": "value",
+                "default": "compilazione#compilazione_azione",
+                "dictionary": "compilazione_azione"
+            },
+            {
+                "field": "data",
+                "xpath": "./ead:eventdatetime",
+                "default": "compilazione#compilazione_data"
+            },
+            {
+                "field": "tipologiaRedattore",
+                "xpath": "./ead:agenttype",
+                "attribute": "value",
+                "constant": "human"
+            },
+            {
+                "field": "redattore",
+                "xpath": "./ead:agent",
+                "default": "compilazione#compilazione_redattore"
+            },
+            {
+                "field": "noteRedazionali",
+                "xpath": "./ead:eventdescription"
+            }
+        ]
+    },
+    "riferimentiBibliografici": {
+        "xpath": "/ead:ead/ead:control/ead:sources",
+        "objectRoot": "ead:sources",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "linkRiferimentiBibliografici",
+                "xpath": "./ead:source/ead:sourceentry",
+                "extractor": [
+                    "extractBiblioText"
+                ]
+            },
+            {
+                "field": "linkRiferimentiBibliografici",
+                "xpath": "./ead:source",
+                "attribute": "href",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractBiblioSBNURI"
+                ]
+            }
+        ]
+    }
+}

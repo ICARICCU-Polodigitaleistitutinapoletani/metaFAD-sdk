@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:iccd="metafad.iccd.views.components.*"
+    id="Page"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Popup.php"
+    defaultAction="showPreview">
+
+    <pnx:templateDefine name="model" required="true" />
+    <pnx:templateDefine name="form_fields" required="true" />
+    <pnx:templateDefine name="controller_name" required="false" defaultValue="metafad.gestioneDati.boards.controllers.*" />
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:State name="showPreview">
+        <iccd:FormEdit id="editForm" newCode="true" readOnly="true" controllerName="##controller_name##">
+            <pnx:Hidden id="__model" value="##model##"/>
+            <pnx:HtmlButton label="{i18n:Mostra versione stampabile}" type="button" cssClass="btn btn-flat btn-info js-print" />
+            ##form_fields##
+        </iccd:FormEdit>
+        <pnx:JSscript folder="metafad/common/views/js/preview"/>
+    </mvc:State>
+</mvc:Page>

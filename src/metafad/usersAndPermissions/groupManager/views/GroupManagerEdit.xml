@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:com="metafad.common.views.components.*"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Page.php">
+    <pnx:Import src="_common.xml" />
+
+    <mvc:State name="index">
+        <com:DataGridAjax id="dataGrid" recordClassName="pinaxcms.groupManager.models.UserGroup" filters="{filters}" cssClass="table table-bordered table-striped" paginate="{dataGridPaginate}" controller="{dataGridEdit}" jqueryUI="true" >
+            <pnx:DataGridColumn columnName="usergroup_name" headerText="{i18n:PNX_USERGROUP_NAME}" width="95" />
+            <pnx:DataGridColumn columnName="usergroup_id" width="5" cssClass="actions" renderCell="pinaxcms.contents.views.renderer.CellEdit" />
+        </com:DataGridAjax>
+        <pnx:PaginateResult id="dataGridPaginate" cssClass="pagination"/>
+    </mvc:State>
+
+     <mvc:State name="edit">
+        <cms:FormEdit id="myForm" controllerName="pinaxcms.contents.controllers.activeRecordEdit.*">
+            <cms:pageTitleModifier action="edit" label="{i18n:New group}" new="true" />
+            <cms:pageTitleModifier action="edit" label="{i18n:Edit group}" new="false" field="usergroup_name" />
+            <pnx:Hidden id='__id' />
+            <pnx:Hidden id="__model" value="pinaxcms.groupManager.models.UserGroup"/>
+            <pnx:Input id="usergroup_name" label="{i18n:PNX_USERGROUP_NAME}" size="90" required="true" />
+        	<pnx:Hidden id="usergroup_backEndAccess" label="{i18n:PNX_USERGROUP_INTERNAL}" visible="{php:!__Config::get(ACL_ROLES)}" defaultStatus="on" data="type=checkbox" />
+            <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:PNX_SAVE}" type="button" cssClass="btn btn-primary js-pinaxcms-save" data="action=save" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_CLOSE}" type="button" cssClass="btn js-pinaxcms-save" data="action=saveClose" />
+                <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" cssClass="btn js-pinaxcms-cancel" data="action=cancel" />
+            </cms:FormButtonsPanel>
+        </cms:FormEdit>
+    </mvc:State>
+
+</mvc:Page>

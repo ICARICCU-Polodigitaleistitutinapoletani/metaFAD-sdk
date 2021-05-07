@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scons xsi:schemaLocation="http://www.san.beniculturali.it/scons2 http://www.san.beniculturali.it/tracciato/scons2.xsd" 
+    xmlns="http://www.san.beniculturali.it/scons2" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <info>
+    </info>
+    <identificativi>
+    </identificativi>
+</scons>

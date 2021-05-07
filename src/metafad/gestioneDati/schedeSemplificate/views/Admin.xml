@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:com="metafad.common.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:iccd="metafad.thesaurus.views.components.*"
+          xmlns:cmp="metafad.gestioneDati.boards.views.components.*"
+          xmlns:c="metafad.iccd.views.components.*"
+          xmlns:ss="metafad.gestioneDati.schedeSemplificate.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:State name="index">
+      <com:DataGridAjax id="dataGridForms" recordClassName="metafad.gestioneDati.schedeSemplificate.models.Model"
+                        cssClass="table table-bordered table-striped"
+                        fullTextSearch="true"
+                        JQueryUI="true">
+        <pnx:DataGridColumn columnName="name" headerText="{i18n:Nome}"/>
+        <pnx:DataGridColumn columnName="form" headerText="{i18n:Scheda originale}" renderCell="metafad.gestioneDati.schedeSemplificate.views.renderer.CellForm"/>
+        <pnx:DataGridColumn columnName="document_id" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.CellEditDeleteSS" />
+      </com:DataGridAjax>
+      <iccd:AddButton label="" acl="*,edit" routeUrl="actionsMVCAdd" editableRegion="actions" add="Aggiungi scheda" recordClassName="metafad.gestioneDati.schedeSemplificate.models.Model" dataGridAjaxId="dataGridForms"/>
+    </mvc:State>
+
+    <mvc:State name="edit">
+      <pnx:JSscript folder="metafad/gestioneDati/schedeSemplificate/js"/>
+      <c:FormEdit id="editForm" newCode="true" controllerName="metafad.gestioneDati.schedeSemplificate.controllers.*">
+        <pnx:Hidden id="__id"/>
+        <pnx:Hidden id="__model" value="metafad.gestioneDati.schedeSemplificate.models.Model"/>
+        <pnx:Hidden id="oldName"/>
+        <pnx:Input id="name" label="{i18n:Nome}" required="true"/>
+        <pnx:Input id="form" label="{i18n:Scheda originale}" required="true" data="t=term;type=selectfrom;multiple=false;add_new_values=false;proxy=metafad.gestioneDati.schedeSemplificate.models.proxy.ModulesSimpleProxy;return_object=true;"/>
+        <!-- <pnx:Input id="document_detail_status" label="{i18n:Pubblicata}" type="checkbox"/> -->
+        <pnx:Hidden id="fieldJson"/>
+
+        <ss:FieldsList id="fieldList" moduleName=""/>
+
+        <cms:FormButtonsPanel>
+          <pnx:HtmlButton label="{i18n:PNX_SAVE}" type="button" cssClass="btn btn-flat btn-info js-save" data="type=save" acl="*,edit" />
+          <pnx:HtmlButton label="{i18n:PNX_SAVE_CLOSE}" type="button" cssClass="btn btn-flat js-save" data="type=saveClose" acl="*,edit" />
+          <pnx:HtmlButton label="{i18n:PNX_SAVE}" type="button" cssClass="btn btn-flat btn-info hide js-pinaxcms-save js-pinaxcms-saveNotClose" data="action=save" acl="*,edit" />
+          <pnx:HtmlButton label="{i18n:PNX_SAVE_CLOSE}" type="button" cssClass="btn btn-flat hide js-pinaxcms-save js-pinaxcms-saveClose" data="action=saveClose" acl="*,edit" />
+        </cms:FormButtonsPanel>
+      </c:FormEdit>
+    </mvc:State>
+
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="metafad.gestioneDati.schedeSemplificate.controllers.*" />
+    </mvc:State>
+</mvc:Page>

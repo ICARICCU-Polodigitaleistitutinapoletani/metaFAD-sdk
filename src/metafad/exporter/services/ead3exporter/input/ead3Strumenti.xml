@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ead xsi:schemaLocation="http://ead3.archivists.org/schema/ http://www.san.beniculturali.it/tracciato/ead3.xsd" 
+    xmlns="http://ead3.archivists.org/schema/" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <control>
+        <recordid></recordid>
+        <filedesc></filedesc>
+        <maintenancestatus/>
+        <publicationstatus value="published"/>
+        <maintenanceagency>
+            <agencyname></agencyname>
+        </maintenanceagency>
+    </control>
+    <archdesc level="fonds">
+        <did>
+            <unittitle/>
+        </did>
+    </archdesc>
+</ead>

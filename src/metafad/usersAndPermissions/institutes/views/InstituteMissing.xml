@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cmp="metafad.usersAndPermissions.institutes.views.components.*"
+          xmlns:com="metafad.common.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php">
+
+    <pnx:Authenticator accessPageId="Login" label="" logoutPageId="Logout" cssClass="logout" editableRegion="logout" icon="btn btn-info btn-flat fa fa-power-off" />
+
+    <mvc:State name="index" label="{i18n:Elenco}">
+        <pnx:LongText><![CDATA[
+            L'utenza non è associata a nessun istituto, contattare l'amministratore di sistema.
+        ]]></pnx:LongText>
+    </mvc:State>
+</mvc:Page>

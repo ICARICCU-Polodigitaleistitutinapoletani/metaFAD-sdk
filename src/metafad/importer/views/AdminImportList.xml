@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:cmp="archivi.views.components.*"
+    xmlns:com="metafad.common.views.components.*"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Popup.php"
+    defaultAction="edit">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:State id="stateEdit" name="edit,editDraft" label="{i18n:Scheda}" draw="false" cssClass="editState">
+        <com:ModalConfirmImport />
+        
+        
+        <pnx:JSscript><![CDATA[
+        $( document ).ready( function(){
+            
+            $('.js-pinaxcms-import').click(function (e) {
+
+                $.ajax({
+                url: Pinax.ajaxUrl + '&controllerName=metafad.importer.controllers.ajax.Saveimport',
+                type: 'POST',
+                success:  function(data){
+                        saveOrCancelSuccess(data);
+                },
+                error: function (data) {
+                    console.log('Errore');
+                }
+                });       
+            });
+
+            
+            var saveOrCancelSuccess = function(data) {
+                
+                
+                if (data.url) {
+                    if (data.target == 'window') {
+                        parent.window.location.href = data.url;
+                    } else {
+                        document.location.href = data.url;
+                    }
+                }
+                 else if (data.errors) {
+                   
+                    var errorMsg = '<p>'+PinaxLocale.FormEdit.unableToSave+'</p><ul>';
+                    $.each(data.errors, function(id, value) {
+                        errorMsg += '<li><p class="alert alert-error">'+value+'</p></li>';
+                    });
+                    Pinax.events.broadcast("pinax.message.showError", {"title": lang.errorValidationMsg+' '+errorMsg, "message": ""});
+                } else {
+                    if (triggerAction) {
+                        $(triggerAction).trigger('click');
+                    } else {
+                        Pinax.events.broadcast("pinax.message.showSuccess", {"title": lang.saveSuccessMsg, "message": ""});
+                    }
+                }
+            }
+
+            $('.js-pinaxcms-annulla').click(function (e) {
+
+               var ann = "annulla";
+               $.ajax({
+                url: Pinax.ajaxUrl + '&controllerName=metafad.importer.controllers.ajax.Saveimport',
+                type: 'POST',
+                data:  {
+                         annulla: ann
+                       },
+                success:  function(data){
+                            
+                            if (data.url) {
+                                if (data.target == 'window') {
+                                    parent.window.location.href = data.url;
+                                 } 
+                            else {
+                                    document.location.href = data.url;
+                                }
+                            }
+                         },
+                error: function (data) {
+                    console.log('Errore');
+                }
+                }); 
+               
+            });
+
+        });
+        ]]></pnx:JSscript>-->
+    </mvc:State>
+</mvc:Page>

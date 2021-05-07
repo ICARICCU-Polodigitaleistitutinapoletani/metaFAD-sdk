@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pnx:Routing>
+    <pnx:Route name="metafad.strumag" value="{pageId=metafad.strumag.views.Admin}/{action=edit}/{value=id}" />
+</pnx:Routing>

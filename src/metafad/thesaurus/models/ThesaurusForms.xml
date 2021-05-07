@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model:Model
+        xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+        xmlns:model="pinax.models.*/"
+        model:type="2tables"
+        model:tableName="thesaurus_tbl,thesaurusforms_tbl"
+        model:joinFields="thesaurus_id,thesaurusforms_FK_thesaurus_id"
+        model:usePrefix="true">
+
+    <model:Query name="findTerm" type="function" arguments="moduleId,fieldName,level">
+    <![CDATA[
+        $directLevel = strncmp($level, "Direct", 6) === 0 && intval(substr($level, 6)) > 0;
+        $expr = $iterator->expr();
+        if($level == '*' || $directLevel)
+        {
+          $joinExpr = $expr->eq("thesaurusforms_FK_thesaurus_id", "thesaurusdetails_FK_thesaurus_id");
+        }
+        else
+        {
+          $joinExpr = $expr->andX(
+              $expr->eq("thesaurusforms_FK_thesaurus_id", "thesaurusdetails_FK_thesaurus_id"),
+              $expr->eq("thesaurusforms_level", "thesaurusdetails_level")
+          );
+        }
+
+        if ($directLevel)
+        {
+            $iterator->select('thesaurusdetails_key', 'thesaurusdetails_value','thesaurusdetails_FK_thesaurus_id','thesaurusdetails_parent')
+                     ->join('t1', 'thesaurusdetails_tbl', "t2", $joinExpr)
+                     ->where('thesaurusforms_moduleId', $moduleId)
+                     ->where('thesaurusforms_field', $fieldName)
+                     ->where('thesaurusdetails_level', substr($level, 6))
+                     ->orderBy('thesaurusdetails_key');
+        }
+        else
+        {
+            $iterator->select('thesaurusdetails_key', 'thesaurusdetails_value','thesaurusdetails_FK_thesaurus_id','thesaurusdetails_parent')
+                     ->join('t1', 'thesaurusdetails_tbl', "t2", $joinExpr)
+                     ->where('thesaurusforms_moduleId', $moduleId)
+                     ->where('thesaurusforms_field', $fieldName)
+                     ->orderBy('thesaurusdetails_key');
+        }
+
+        if(__Config::get('metafad.thesaurus.filterInstitute'))
+        {
+            $instituteProxy = pinax_ObjectFactory::createObject('metafad.usersAndPermissions.institutes.models.proxy.InstitutesProxy');
+            $instituteKey = metafad_usersAndPermissions_Common::getInstituteKey();
+            $list = $instituteProxy->getOtherInstitutesList($instituteKey);
+            foreach($list as $l)
+            {
+                $iterator->where('t2.thesaurusdetails_instituteKey',$l,'<>');
+            }
+        }
+	]]>
+	</model:Query>
+
+</model:Model>

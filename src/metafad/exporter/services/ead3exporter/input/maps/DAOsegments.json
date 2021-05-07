@@ -1,0 +1,51 @@
+{
+    "mediaCollegati": {
+        "xpath": "./ead:did/ead:dao",
+        "objectRoot": "ead:dao",
+        "notCreateNewNodeIfExists": true,
+        "forceObject": true,
+        "object": [
+            {
+                "field": "mediaCollegati",
+                "xpath": ".",
+                "attribute": "daotype",
+                "constant": "derived"
+            },
+            {
+                "field": "mediaCollegati",
+                "xpath": ".",
+                "attribute": "coverage",
+                "constant": "whole"
+            },
+            {
+                "field": "mediaCollegati",
+                "xpath": ".",
+                "attribute": "id",
+                "mediaExtractor": "getMediaValue",
+                "mediaExtractorAttr": "id",
+                "singleImg": true
+            },
+            {
+                "field": "mediaCollegati",
+                "xpath": ".",
+                "attribute": "href",
+                "mediaExtractor": "getMediaValue",
+                "mediaExtractorAttr": "src"
+            }
+        ]
+    },
+    "linkedStruMag": {
+        "xpath": "./ead:did/ead:daoset[@coverage='whole']",
+        "objectRoot": "ead:daoset",
+        "notCreateNewNodeIfExists": true,
+        "forceObject": true,
+        "isMetadata": true,
+        "object": [
+            {
+                "field": "linkedStruMag",
+                "xpath": "./ead:dao",
+                "mediaExtractor": "getMetadata"
+            }
+        ]
+    }
+}

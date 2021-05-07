@@ -1,0 +1,38 @@
+{
+    "identificativo": [
+        {
+            "xpath": "/mets:mets/mets:dmdSec",
+            "attribute": "ID",
+            "utility": "getMetsId",
+            "utilityParams": {
+                "prefix": "DMD_"
+            }
+        }
+    ],
+    "identificativo#": [
+        {
+            "xpath": "/mets:mets/mets:amdSec",
+            "attribute": "ID",
+            "utility": "getMetsId",
+            "utilityParams": {
+                "prefix": "AMD_"
+            }
+        }
+    ],
+    "identificativo##": [
+        {
+            "xpath": "/mets:mets/mets:dmdSec/mets:mdWrap/mets:xmlData/dc:identifier",
+            "utility": "getMetsId"
+        }
+    ],
+    "identificativo###": [
+        {
+            "xpath": "/mets:mets/mets:amdSec/mets:rightsMD",
+            "attribute": "ID",
+            "utility": "getMetsId",
+            "utilityParams": {
+                "prefix": "MD_"
+            }
+        }
+    ]
+}

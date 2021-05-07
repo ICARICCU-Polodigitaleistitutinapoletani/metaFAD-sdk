@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cmp="metafad.strumag.views.components.*"
+          xmlns:gdb="metafad.gestioneDati.boards.views.components.*"
+          xmlns:com="metafad.common.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active"
+                            addQueryString="true" visible="false"/>
+
+    <mvc:State id="stateIndex" name="index" label="{i18n:Elenco}" url="metafad.strumag#list">
+        <com:DataGridSolr id="dataGrid" recordClassName="metafad.strumag.models.Model"
+                          cssClass="table table-bordered table-striped"
+                          controllerName="metafad.strumag.controllers.*" fullTextSearch="true"
+                          JQueryUI="true">
+            <pnx:DataGridColumn columnName="id" sortable="false" headerText="{i18n:Identificativo}" width="12"/>
+            <pnx:DataGridColumn columnName="title_t" headerText="{i18n:Titolo}" width="40" renderCell="metafad.common.views.renderer.ShortField"/>
+            <pnx:DataGridColumn columnName="update_at_s" headerText="{i18n:Data}" width="25"/>
+                  <pnx:DataGridColumn columnName="document_detail_status" headerText="{i18n:Pubblicata}" width="15" cssClass="center" renderCell="metafad.common.views.renderer.CellDocPublished" />
+            <pnx:DataGridColumn columnName="document_id" sortable="false" searchable="false" cssClass="actions" widht="8"
+                                renderCell="metafad.strumag.views.renderer.CellEditDeleteEcommerce"/>
+        </com:DataGridSolr>
+        <com:AddButton acl="*,new" cssClass="dataGridAddButton" label="" routeUrl="teca-STRUMAG/edit/" editableRegion="actions"
+                       recordClassName="metafad.strumag.models.Model" dataGridAjaxId="dataGrid"/>
+    </mvc:State>
+
+
+
+    <mvc:State name="edit,ecommerce">
+        <cms:FormEdit id="editForm" newCode="true" controllerName="metafad.strumag.controllers.*">
+            <pnx:Hidden id="__id"/>
+            <pnx:Hidden id="__model" value="metafad.strumag.models.Model"/>
+            <pnx:Hidden id="MAG" />
+            <pnx:Hidden id="state" />
+            <pnx:Hidden id="title" />
+            <pnx:Hidden id="physicalSTRU" />
+            <pnx:Hidden id="logicalSTRU" />
+			<pnx:Hidden id="instituteKey" />
+        </cms:FormEdit>
+        <cmp:AngularMagStrumag id="strumagSection" editableRegion="dam"/>
+    </mvc:State>
+
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="metafad.strumag.controllers.Delete"/>
+    </mvc:State>
+</mvc:Page>

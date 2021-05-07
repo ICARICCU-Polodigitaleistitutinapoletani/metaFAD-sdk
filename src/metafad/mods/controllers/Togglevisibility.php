@@ -1,0 +1,5 @@
+<?php
+class metafad_mods_controllers_Togglevisibility extends pinaxcms_contents_controllers_moduleEdit_Togglevisibility
+{
+
+}

@@ -1,0 +1,4 @@
+<?php
+class metafad_gestioneDati_boards_controllers_Show extends pinaxcms_contents_controllers_moduleEdit_Edit
+{
+}

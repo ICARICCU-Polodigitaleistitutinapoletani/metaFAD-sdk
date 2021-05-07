@@ -1,0 +1,869 @@
+{
+    "identificativo": [
+        {
+            "xpath": "/eac-cpf:eac-cpf/eac-cpf:control/eac-cpf:recordId",
+            "utility": "charsSubstitute",
+            "utilityParams": {
+                "charsToReplace": " ",
+                "newChar": "_"
+            }
+        }
+    ],
+    "altriCodiciIdentificativi": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:control/eac-cpf:otherRecordId",
+        "objectRoot": "eac-cpf:otherRecordId",
+        "insertBefore": [
+            "maintenanceStatus"
+        ],
+        "object": [
+            {
+                "field": "codice",
+                "xpath": "."
+            },
+            {
+                "field": "qualifica",
+                "xpath": ".",
+                "attribute": "localType"
+            }
+        ]
+    },
+    "codiceIdentificativoPrecedente": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:control/eac-cpf:otherRecordId[@localType='metafad']",
+        "objectRoot": "eac-cpf:otherRecordId",
+        "insertBefore": [
+            "maintenanceStatus"
+        ],
+        "object": [
+            {
+                "field": "codice",
+                "xpath": "."
+            }
+        ]
+    },
+    "compilazioneProduttore": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:control/eac-cpf:maintenanceHistory/eac-cpf:maintenanceEvent",
+        "objectRoot": "eac-cpf:maintenanceEvent",
+        "defaultRoot": "compilazione",
+        "object": [
+            {
+                "field": "azione",
+                "xpath": "./eac-cpf:eventType",
+                "default": "compilazione#compilazione_azione",
+                "dictionary": "compilazione_azione"
+            },
+            {
+                "TODO": "Aggiungere anche valore in standardDateTime",
+                "field": "data",
+                "xpath": "./eac-cpf:eventDateTime",
+                "hasDefault": true,
+                "utility": "generateIsoDateIfNotDefined"
+            },
+            {
+                "field": "tipologiaRedattore",
+                "xpath": "./eac-cpf:agentType",
+                "default": "compilazione#compilazione_tipo",
+                "dictionary": "compilazione_tipo"
+            },
+            {
+                "field": "redattore",
+                "xpath": "./eac-cpf:agent",
+                "default": "compilazione#compilazione_redattore"
+            },
+            {
+                "field": "note",
+                "xpath": "./eac-cpf:eventDescription"
+            }
+        ]
+    },
+    "tipologiaChoice": [
+        {
+            "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:identity/eac-cpf:entityType",
+            "utility": "tipologiaChoiceProduttore"
+        }
+    ],
+    "ente_famiglia_denominazione": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:identity/eac-cpf:nameEntry",
+        "objectRoot": "eac-cpf:nameEntry",
+        "object": [
+            {
+                "field": "entitaDenominazione",
+                "xpath": "./eac-cpf:part"
+            },
+            {
+                "field": "ente_famiglia_qualifica",
+                "attribute": "localType",
+                "xpath": ".",
+                "utility": "qualificaDenominazioneProduttore"
+            },
+            {
+                "field": "ente_famiglia_cronologia",
+                "selectiveBuild": {
+                    "field": "ente_famiglia_qualifica",
+                    "value": "Altre denominazioni"
+                },
+                "xpath": "./eac-cpf:useDates/##placeholder##",
+                "extractor": [
+                    "extractDataERemoto",
+                    "extractPathCronologiaRemoto"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath"
+            },
+            {
+                "field": "ente_famiglia_cronologia",
+                "selectiveBuild": {
+                    "field": "ente_famiglia_qualifica",
+                    "value": "Altre denominazioni"
+                },
+                "xpath": "./eac-cpf:useDates/##placeholder##",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractDataERecente",
+                    "extractPathCronologiaRecente"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath",
+                "newNodeDeep": 3
+            }
+        ]
+    },
+    "famiglia_denominazione": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:identity/eac-cpf:nameEntry",
+        "objectRoot": "eac-cpf:nameEntry",
+        "object": [
+            {
+                "field": "entitaDenominazione",
+                "xpath": "./eac-cpf:part"
+            },
+            {
+                "field": "famiglia_qualifica",
+                "attribute": "localType",
+                "xpath": ".",
+                "utility": "qualificaDenominazioneProduttore"
+            },
+            {
+                "field": "famiglia_cronologia",
+                "selectiveBuild": {
+                    "field": "famiglia_qualifica",
+                    "value": "Altre denominazioni"
+                },
+                "xpath": "./eac-cpf:useDates/##placeholder##",
+                "extractor": [
+                    "extractDataERemoto",
+                    "extractPathCronologiaRemoto"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath"
+            },
+            {
+                "field": "famiglia_cronologia",
+                "selectiveBuild": {
+                    "field": "famiglia_qualifica",
+                    "value": "Altre denominazioni"
+                },
+                "xpath": "./eac-cpf:useDates/##placeholder##",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractDataERecente",
+                    "extractPathCronologiaRecente"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath",
+                "newNodeDeep": 3
+            }
+        ]
+    },
+    "persona_denominazione": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:identity/eac-cpf:nameEntry",
+        "objectRoot": "eac-cpf:nameEntry",
+        "object": [
+            {
+                "field": "persona_linguaDenominazione",
+                "xpath": ".",
+                "attribute": "xml:lang"
+            },
+            {
+                "field": "entitaDenominazione",
+                "xpath": "./eac-cpf:part[@localType='cognome']"
+            },
+            {
+                "field": "persona_nome",
+                "xpath": "./eac-cpf:part[@localType='nome']"
+            },
+            {
+                "field": "persona_patronimico",
+                "xpath": "./eac-cpf:part[@localType='patronimico']"
+            },
+            {
+                "field": "persona_pseudonimo",
+                "xpath": "./eac-cpf:part[@localType='pseudonimo']"
+            },
+            {
+                "field": "persona_soprannome",
+                "xpath": "./eac-cpf:part[@localType='soprannome']"
+            },
+            {
+                "field": "persona_qualifica",
+                "attribute": "localType",
+                "xpath": ".",
+                "utility": "qualificaDenominazioneProduttore"
+            },
+            {
+                "field": "persona_cronologia",
+                "selectiveBuild": {
+                    "field": "persona_qualifica",
+                    "value": "Altre denominazioni"
+                },
+                "xpath": "./eac-cpf:useDates/##placeholder##",
+                "extractor": [
+                    "extractDataERemoto",
+                    "extractPathCronologiaRemoto"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath"
+            },
+            {
+                "field": "persona_cronologia",
+                "selectiveBuild": {
+                    "field": "persona_qualifica",
+                    "value": "Altre denominazioni"
+                },
+                "xpath": "./eac-cpf:useDates/##placeholder##",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractDataERecente",
+                    "extractPathCronologiaRecente"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath",
+                "newNodeDeep": 3
+            }
+        ]
+    },
+    "ente_famiglia_denominazione#": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:description/eac-cpf:existDates",
+        "objectRoot": "eac-cpf:existDates",
+        "notCreateNewNodeIfExists": true,
+        "onlyFirstRep": true,
+        "object": [
+            {
+                "field": "ente_famiglia_cronologia",
+                "selectiveBuild": {
+                    "field": "ente_famiglia_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./##placeholder##",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractDataERemoto",
+                    "extractPathCronologiaRemoto"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath"
+            },
+            {
+                "field": "ente_famiglia_cronologia",
+                "selectiveBuild": {
+                    "field": "ente_famiglia_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./##placeholder##",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractDataERecente",
+                    "extractPathCronologiaRecente"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath"
+            },
+            {
+                "field": "ente_famiglia_cronologia",
+                "selectiveBuild": {
+                    "field": "ente_famiglia_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./##placeholder##",
+                "attribute": "localType",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractQualificaDataEnte",
+                    "extractPathCronologiaRemoto"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath",
+                "isQualifica": true
+            },
+            {
+                "field": ".",
+                "selectiveBuild": {
+                    "field": "ente_famiglia_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./eac-cpf:descriptiveNote/eac-cpf:p",
+                "notCreateNewNodeIfExists": true,
+                "utility": "noteDatazioneProduttori",
+                "utilityParams": {
+                    "cronologia": "ente_famiglia_cronologia",
+                    "qualifica": "ente_famiglia_qualifica",
+                    "nota": "ente_famiglia_notaDatazione",
+                    "qualificaValue": "Denominazione principale"
+                }
+            }
+        ]
+    },
+    "famiglia_denominazione#": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:description/eac-cpf:existDates",
+        "objectRoot": "eac-cpf:existDates",
+        "notCreateNewNodeIfExists": true,
+        "onlyFirstRep": true,
+        "object": [
+            {
+                "field": "famiglia_cronologia",
+                "selectiveBuild": {
+                    "field": "famiglia_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./##placeholder##",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractDataERemoto",
+                    "extractPathCronologiaRemoto"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath"
+            },
+            {
+                "field": "famiglia_cronologia",
+                "selectiveBuild": {
+                    "field": "famiglia_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./##placeholder##",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractDataERecente",
+                    "extractPathCronologiaRecente"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath"
+            },
+            {
+                "field": "famiglia_cronologia",
+                "selectiveBuild": {
+                    "field": "famiglia_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./##placeholder##",
+                "attribute": "localType",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractQualificaDataFamiglia",
+                    "extractPathCronologiaRemoto"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath",
+                "isQualifica": true
+            },
+            {
+                "field": ".",
+                "selectiveBuild": {
+                    "field": "famiglia_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./eac-cpf:descriptiveNote/eac-cpf:p",
+                "notCreateNewNodeIfExists": true,
+                "utility": "noteDatazioneProduttori",
+                "utilityParams": {
+                    "cronologia": "famiglia_cronologia",
+                    "qualifica": "famiglia_qualifica",
+                    "nota": "famiglia_notaDatazione",
+                    "qualificaValue": "Denominazione principale"
+                }
+            }
+        ]
+    },
+    "persona_denominazione#": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:description/eac-cpf:existDates",
+        "objectRoot": "eac-cpf:existDates",
+        "notCreateNewNodeIfExists": true,
+        "onlyFirstRep": true,
+        "object": [
+            {
+                "field": "persona_cronologia",
+                "selectiveBuild": {
+                    "field": "persona_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./##placeholder##",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractDataERemoto",
+                    "extractPathCronologiaRemoto"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath"
+            },
+            {
+                "field": "persona_cronologia",
+                "selectiveBuild": {
+                    "field": "persona_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./##placeholder##",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractDataERecente",
+                    "extractPathCronologiaRecente"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath"
+            },
+            {
+                "field": "persona_cronologia",
+                "selectiveBuild": {
+                    "field": "persona_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./##placeholder##",
+                "attribute": "localType",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractQualificaDataPersona",
+                    "extractPathCronologiaRemoto"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath",
+                "isQualifica": true
+            },
+            {
+                "field": ".",
+                "selectiveBuild": {
+                    "field": "persona_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./eac-cpf:descriptiveNote/eac-cpf:p",
+                "notCreateNewNodeIfExists": true,
+                "utility": "noteDatazioneProduttori",
+                "utilityParams": {
+                    "cronologia": "persona_cronologia",
+                    "qualifica": "persona_qualifica",
+                    "nota": "persona_notaDatazione",
+                    "qualificaValue": "Denominazione principale"
+                }
+            },
+            {
+                "field": "persona_cronologia",
+                "selectiveBuild": {
+                    "field": "persona_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./eac-cpf:descriptiveNote/eac-cpf:p/eac-cpf:span",
+                "attribute": "localType",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractValiditaProduttori"
+                ]
+            },
+            {
+                "field": "persona_cronologia",
+                "selectiveBuild": {
+                    "field": "persona_qualifica",
+                    "value": "Denominazione principale"
+                },
+                "xpath": "./eac-cpf:descriptiveNote/eac-cpf:p/eac-cpf:span",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractValiditaProduttoriValue"
+                ]
+            }
+        ]
+    },
+    "ente_famiglia_denominazione##": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:identity",
+        "objectRoot": "eac-cpf:identity",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": ".",
+                "xpath": "./eac-cpf:descriptiveNote/eac-cpf:p",
+                "utility": "noteDatazioneProduttori",
+                "notCreateNewNodeIfExists": true,
+                "utilityParams": {
+                    "cronologia": "ente_famiglia_cronologia",
+                    "qualifica": "ente_famiglia_qualifica",
+                    "nota": "ente_famiglia_notaDatazione",
+                    "qualificaValue": "Altre denominazioni"
+                }
+            }
+        ]
+    },
+    "famiglia_denominazione##": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:identity",
+        "notCreateNewNodeIfExists": true,
+        "objectRoot": "eac-cpf:identity",
+        "object": [
+            {
+                "field": ".",
+                "xpath": "./eac-cpf:descriptiveNote/eac-cpf:p",
+                "utility": "noteDatazioneProduttori",
+                "utilityParams": {
+                    "cronologia": "famiglia_cronologia",
+                    "qualifica": "famiglia_qualifica",
+                    "nota": "famiglia_notaDatazione",
+                    "qualificaValue": "Altre denominazioni"
+                }
+            }
+        ]
+    },
+    "persona_denominazione##": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:identity",
+        "notCreateNewNodeIfExists": true,
+        "objectRoot": "eac-cpf:identity",
+        "object": [
+            {
+                "field": "eac-cpf:identity",
+                "xpath": "./eac-cpf:descriptiveNote/eac-cpf:p",
+                "utility": "noteDatazioneProduttori",
+                "notCreateNewNodeIfExists": true,
+                "utilityParams": {
+                    "cronologia": "persona_cronologia",
+                    "qualifica": "persona_qualifica",
+                    "nota": "persona_notaDatazione",
+                    "qualificaValue": "Altre denominazioni"
+                }
+            }
+        ]
+    },
+    "luogoEnte": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:description/eac-cpf:place",
+        "objectRoot": "eac-cpf:place",
+        "object": [
+            {
+                "field": "luogoEnte_qualificaLuogo",
+                "xpath": "./eac-cpf:placeRole[@vocabularySource='http://dati.san.beniculturali.it/SAN/TesauroSAN/Tipo_luogo_CPF']",
+                "limitExplode": 1
+            },
+            {
+                "field": "luogoEnte_nomeLuogo",
+                "xpath": "./eac-cpf:placeEntry"
+            },
+            {
+                "field": "luogoEnte_denominazioneStorica",
+                "xpath": "./eac-cpf:placeEntry[@localType='historicalName']"
+            }
+        ]
+    },
+    "luogoFamiglia": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:description/eac-cpf:place",
+        "objectRoot": "eac-cpf:place",
+        "object": [
+            {
+                "field": "luogoFamiglia_qualificaLuogo",
+                "xpath": "./eac-cpf:placeRole",
+                "dictionary": "luogoFamiglia_qualificaLuogo"
+            },
+            {
+                "field": "luogoFamiglia_nomeLuogo",
+                "xpath": "./eac-cpf:placeEntry"
+            },
+            {
+                "field": "luogoFamiglia_denominazioneStorica",
+                "xpath": "./eac-cpf:placeEntry[@localType='historicalName']"
+            }
+        ]
+    },
+    "luogoPersona": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:description/eac-cpf:place",
+        "objectRoot": "eac-cpf:place",
+        "object": [
+            {
+                "field": "luogoPersona_qualificaLuogo",
+                "xpath": "./eac-cpf:placeRole",
+                "dictionary": "luogoPersona_qualificaLuogo"
+            },
+            {
+                "field": "luogoPersona_nomeLuogo",
+                "xpath": "./eac-cpf:placeEntry"
+            },
+            {
+                "field": "luogoPersona_denominazioneStorica",
+                "xpath": "./eac-cpf:placeEntry[@localType='historicalName']"
+            }
+        ]
+    },
+    "condizioneGiuridica": {
+        "TODO": "GESTIRE DATE CAPIRE PROBLEMI",
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:description/eac-cpf:legalStatuses",
+        "objectRoot": "eac-cpf:legalStatuses",
+        "notCreateNewNodeIfExists": true,
+        "purgeIfEmpty": true,
+        "purgeField": "listCondizioneGiuridica",
+        "object": [
+            {
+                "field": "inputConstestoStatuale",
+                "xpath": "./eac-cpf:legalStatus/eac-cpf:term"
+            }
+        ]
+    },
+    "tipologiaEnte": [
+        {
+            "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:description/eac-cpf:localDescription[@localType='tipologiaEnte']/eac-cpf:term[@vocabularySource='http://dati.san.beniculturali.it/SAN/TesauroSAN/sottotipologia_ente']",
+            "limitExplode": 4,
+            "dictionary": "tipologia_ente"
+        }
+    ],
+    "genere": [
+        {
+            "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:description/eac-cpf:localDescription[@localType='genere']/eac-cpf:term",
+            "utility": "generePersona"
+        }
+    ],
+    "titoloEntita": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:description/eac-cpf:localDescription[@localType='titoli']",
+        "objectRoot": "eac-cpf:localDescription",
+        "object": [
+            {
+                "field": "inputTitolo",
+                "xpath": "./eac-cpf:term"
+            },
+            {
+                "field": "titolo_cronologia",
+                "xpath": "./##placeholder##",
+                "extractor": [
+                    "extractDataERemoto",
+                    "extractPathCronologiaRemoto"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath"
+            },
+            {
+                "field": "titolo_cronologia",
+                "xpath": "./##placeholder##",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractDataERecente",
+                    "extractPathCronologiaRecente"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath",
+                "newNodeDeep": 3
+            }
+        ]
+    },
+    "attivitaProfessioneQualifica": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:description",
+        "objectRoot": "eac-cpf:description",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "inputAttivitaProfessioneQualifica",
+                "xpath": "./eac-cpf:localDescription[@localType='professione']/eac-cpf:term"
+            }
+        ]
+    },
+    "titoloPersona": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:description",
+        "objectRoot": "eac-cpf:description",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "inputTitolo",
+                "xpath": "./eac-cpf:localDescription[@localType='titoloNobiliare']/eac-cpf:term"
+            },
+            {
+                "field": "titolo_cronologia",
+                "xpath": "./##placeholder##",
+                "extractor": [
+                    "extractDataERemoto",
+                    "extractPathCronologiaRemoto"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath"
+            },
+            {
+                "field": "titolo_cronologia",
+                "xpath": "./##placeholder##",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractDataERecente",
+                    "extractPathCronologiaRecente"
+                ],
+                "pathRebuilder": "rebuildProduttoreCronologiaPath",
+                "newNodeDeep": 3
+            }
+        ]
+    },
+    "storiaBiografiaStrutturaAmministrativa": [
+        {
+            "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:description/eac-cpf:biogHist/eac-cpf:p"
+        }
+    ],
+    "soggettiProduttori": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:relations/eac-cpf:cpfRelation",
+        "objectRoot": "eac-cpf:cpfRelation",
+        "object": [
+            {
+                "field": "inputSoggettiProduttori",
+                "xpath": "./eac-cpf:relationEntry[@localType='soggettoProduttore']",
+                "extractor": [
+                    "extractFieldId"
+                ]
+            },
+            {
+                "field": "inputSoggettiProduttori",
+                "xpath": ".",
+                "attribute": "xlink:href",
+                "extractor": [
+                    "buildFELink"
+                ],
+                "extractorParams": {
+                    "model": "archivi.models.ProduttoreConservatore"
+                }
+            }
+        ]
+    },
+    "complessiArchivisticiProduttore": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:relations/eac-cpf:resourceRelation[@resourceRelationType='creatorOf']",
+        "objectRoot": "eac-cpf:resourceRelation",
+        "object": [
+            {
+                "field": "inputComplessiArchivistici",
+                "xpath": "./eac-cpf:relationEntry[@localType='complesso']",
+                "extractor": [
+                    "extractComplessoId"
+                ]
+            },
+            {
+                "field": "inputComplessiArchivistici",
+                "xpath": ".",
+                "attribute": "xlink:href",
+                "extractor": [
+                    "buildFELink"
+                ],
+                "extractorParams": {
+                    "model": "archivi.models.ComplessoArchivistico"
+                }
+            }
+        ]
+    },
+    "riferimentiBibliograficiProduttore": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:relations/eac-cpf:resourceRelation[@resourceRelationType='other']",
+        "objectRoot": "eac-cpf:resourceRelation",
+        "object": [
+            {
+                "field": "inputRiferimentiBibliografici",
+                "xpath": "./eac-cpf:relationEntry[@localType='BIBID']",
+                "extractor": [
+                    "extractBiblioId"
+                ]
+            }
+        ]
+    },
+    "riferimentiBibliograficiProduttore#": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:relations/eac-cpf:resourceRelation[@resourceRelationType='other']",
+        "objectRoot": "eac-cpf:resourceRelation",
+        "object": [
+            {
+                "field": "inputRiferimentiBibliografici",
+                "xpath": "./eac-cpf:relationEntry[@localType='BIBTEXT']",
+                "extractor": [
+                    "extractBiblioText"
+                ]
+            }
+        ]
+    },
+    "riferimentiBibliograficiProduttore##": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:relations/eac-cpf:resourceRelation[@resourceRelationType='other']",
+        "objectRoot": "eac-cpf:resourceRelation",
+        "object": [
+            {
+                "field": "inputRiferimentiBibliografici",
+                "xpath": "./eac-cpf:relationEntry[@localType='BIBSBN']",
+                "extractor": [
+                    "extractBiblioSBN"
+                ],
+                "removeEmptyNode": true
+            },
+            {
+                "field": "inputRiferimentiBibliografici",
+                "xpath": ".",
+                "attribute": "xlink:href",
+                "extractor": [
+                    "extractBiblioSBNURI"
+                ],
+                "removeEmptyNode": true
+            }
+        ]
+    },
+    "fontiArchivisticheProduttore": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:relations/eac-cpf:resourceRelation[@resourceRelationType='other']",
+        "objectRoot": "eac-cpf:resourceRelation",
+        "object": [
+            {
+                "field": "inputFontiArchivistiche",
+                "xpath": "./eac-cpf:relationEntry[@localType='FONTEID']",
+                "extractor": [
+                    "extractFonteId"
+                ]
+            }
+        ]
+    },
+    "fontiArchivisticheProduttore#": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:relations/eac-cpf:resourceRelation[@resourceRelationType='other']",
+        "objectRoot": "eac-cpf:resourceRelation",
+        "object": [
+            {
+                "field": "inputFontiArchivistiche",
+                "xpath": "./eac-cpf:relationEntry[@localType='FONTETEXT']",
+                "extractor": [
+                    "extractFonteText"
+                ]
+            }
+        ]
+    },
+    "fontiArchivisticheProduttore##": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:relations/eac-cpf:resourceRelation[@resourceRelationType='other']",
+        "objectRoot": "eac-cpf:resourceRelation",
+        "object": [
+            {
+                "field": "inputFontiArchivistiche",
+                "xpath": "./eac-cpf:relationEntry[@localType='FONTEURI']",
+                "extractor": [
+                    "extractFonteURI"
+                ]
+            },
+            {
+                "field": "inputFontiArchivistiche",
+                "xpath": ".",
+                "attribute": "xlink:href",
+                "extractor": [
+                    "extractFonteURIURI"
+                ],
+                "removeEmptyNode": true
+            }
+        ]
+    },
+    "riferimentiWebProduttore": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:relations/eac-cpf:resourceRelation[@resourceRelationType='other']",
+        "objectRoot": "eac-cpf:resourceRelation",
+        "object": [
+            {
+                "field": "rifWeb_url",
+                "xpath": "./eac-cpf:relationEntry[@localType='URL']"
+            },
+            {
+                "field": "denominazioneSitoWeb",
+                "xpath": "./eac-cpf:relationEntry[@localType='URL']",
+                "notCreateNewNodeIfExists": true
+            },
+            {
+                "field": "rifWeb_descrizione",
+                "xpath": "./eac-cpf:relationEntry[@localType='URL']",
+                "notCreateNewNodeIfExists": true
+            },
+            {
+                "field": "rifWeb_url",
+                "xpath": ".",
+                "attribute": "xlink:href",
+                "notCreateNewNodeIfExists": true
+            }
+        ]
+    },
+    "complessiArchivisticiProduttore#": {
+        "xpath": "/eac-cpf:eac-cpf/eac-cpf:cpfDescription/eac-cpf:relations/eac-cpf:resourceRelation[@resourceRelationType='other']",
+        "objectRoot": "eac-cpf:resourceRelation",
+        "object": [
+            {
+                "field": "inputComplessiArchivistici",
+                "xpath": "./eac-cpf:relationEntry[@localType='TEMA']",
+                "extractor": [
+                    "extractTematismi"
+                ],
+                "buildMoreObjectNodes": true,
+                "removeEmptyNode": true
+            }
+        ]
+    }
+}

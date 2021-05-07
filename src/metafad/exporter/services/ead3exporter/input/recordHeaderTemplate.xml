@@ -1,0 +1,8 @@
+<icar-import:record>
+    <icar-import:recordHeader action="insert" type="">
+        <icar-import:id>SAN:sc-002</icar-import:id>
+        <icar-import:lastUpdate></icar-import:lastUpdate>
+    </icar-import:recordHeader>
+    <icar-import:recordBody>
+    </icar-import:recordBody>
+</icar-import:record>

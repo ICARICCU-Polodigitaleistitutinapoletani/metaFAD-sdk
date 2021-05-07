@@ -1,0 +1,19 @@
+{
+    "archivi.models.UnitaArchivistica" : [
+      "conservatoreDen",
+      "produttoreDen",
+      "conservatore_tipo",
+      "produttore_tipo"
+    ],
+    "archivi.models.UnitaDocumentaria" : [
+      "conservatoreDen",
+      "produttoreDen",
+      "conservatore_tipo",
+      "produttore_tipo"
+    ],
+    "archivi.models.ComplessoArchivistico" : [
+      "conservatore_tipo",
+      "produttore_tipo"
+    ]
+  }
+  

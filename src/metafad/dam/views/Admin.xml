@@ -1,0 +1,13 @@
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:dam="metafad.dam.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php">
+    <pnx:Import src="_common.xml"/>
+
+    <dam:DAM editableRegion="dam"/>
+
+</mvc:Page>

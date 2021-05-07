@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cmp="metafad.importer.views.components.*"
+          xmlns:iccd="metafad.iccd.views.components.*"
+          controllerName="metafad.importer.controllers.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml" />
+
+    <mvc:StateTabNavigation id="tab" cssClass="nav nav-tabs" cssClassCurrent="active" visible="false" />
+    <pnx:Modifier target="tab" attribute="visible" value="true" />
+
+    
+    
+    <mvc:State name="index" label="Importa file">
+        <cms:FormEdit id="editForm" enctype="multipart/form-data">
+            <iccd:Input id="module" parentId="gestione-dati/patrimonio,gestione-dati/authority,gestione-dati-bibliografico,gestione-dati/tei,gestione-dati/authority/iccd" label="Tipo di scheda" defaultValue="gestione-dati/patrimonio" required="true"/>
+            <pnx:Input id="fileuploader" label="{i18n:Pacchetto zip}" data="type=file;fieldsetid=medias;maxfiles=1;acceptedfiles=.zip;maxfilesize=2048;maxlabel=2048 MB;" />
+            <pnx:Fieldset id="medias" label="File caricato su server" data="type=repeat;collapsable=false;noAddRowButton=true">
+                <pnx:Hidden id="__uploadFilename" />
+                <pnx:Hidden id="__originalFileName" />
+            </pnx:Fieldset>
+            <cmp:FolderList id="sbnFolder" moduleRef="metafad.sbn.modules.sbnunimarc" cssClass="hide" pathFromConfig="metafad.sbn.outputFolder.web" label="Cartella SBN Unimarc"/>
+            <cmp:FolderList id="sbnAutFolder" moduleRef="AuthoritySBNModuleName" cssClass="hide" pathFromConfig="metafad.sbnaut.outputFolder.web" label="Cartella SBN AUT"/>
+            <pnx:List id="uploadType" label="{i18n:Tipo di caricamento}" size="90" >
+                <pnx:ListItem key="dbonly" value="Solo DB" />
+                <pnx:ListItem key="increment" value="Aggiornamento (upload incrementale)" />
+                <pnx:ListItem key="delete" value="Cancella e reimporta (attenzione, cancella TUTTO l'indice SBN!)" />
+            </pnx:List>
+            <pnx:List id="format" label="{i18n:Formato}" size="90" required="true">
+                <pnx:ListItem key="trc" value="ICCD 92" />
+                <pnx:ListItem key="iccdxml" value="ICCD XML" />
+                <pnx:ListItem key="sbn" value="SBN" />
+                <pnx:ListItem key="tei" value="TEI" />
+                <pnx:ListItem key="eadeac" value="EAD/EAC" />
+                <pnx:ListItem key="ead3" value="EAD3" />
+
+            </pnx:List>
+            <pnx:Checkbox id="overwriteScheda" label="Sovrascrivi schede se già presenti"/>
+            <pnx:Checkbox id="overwriteAuthority" label="Sovrascrivi authorities se già presenti"/>
+            <pnx:Checkbox id="partialValidation" label="Verifica integrità referenziale"/>
+            <pnx:Checkbox id="onlyValidation" label="Valida soltanto"/>
+            <pnx:Checkbox id="onlyRecord" label="Non importare le immagini"/>
+            <pnx:Checkbox id="onlyMedia" label="Importa solo le immagini"/>
+            <cms:FormButtonsPanel id="formButtons">
+                <pnx:HtmlButton label="{i18n:Import}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save" data="action=import" />
+            </cms:FormButtonsPanel>
+        </cms:FormEdit>
+        <pnx:JSscript folder="metafad/importer/js"/>
+    </mvc:State>
+
+    <mvc:State id="addFromServer" name="addFromServer" label="Importa da server">
+        <pnx:Modifier target="tab" attribute="visible" value="true" />
+        <cms:FormEdit id="editForm" enctype="multipart/form-data">
+            <iccd:Input id="module" parentId="gestione-dati/patrimonio,gestione-dati/authority,gestione-dati-bibliografico,gestione-dati/tei,gestione-dati/authority/iccd" label="Tipo di scheda" defaultValue="gestione-dati/patrimonio" required="true"/>
+            <cmp:FilePicker id="fileFromServer" customPath="{config:metafad.importer.storageFolder}" label="{i18n:File}" required="true"/>
+            <cmp:FolderList id="sbnFolder" moduleRef="metafad.sbn.modules.sbnunimarc" cssClass="hide" pathFromConfig="metafad.sbn.outputFolder.web" label="Cartella SBN Unimarc"/>
+            <cmp:FolderList id="sbnAutFolder" moduleRef="AuthoritySBNModuleName" cssClass="hide" pathFromConfig="metafad.sbnaut.outputFolder.web" label="Cartella SBN AUT"/>
+            <pnx:List id="uploadType" label="{i18n:Tipo di caricamento}" size="90" >
+                <pnx:ListItem key="increment" value="Aggiornamento (upload incrementale)" />
+                <pnx:ListItem key="delete" value="Cancella e reimporta (attenzione, cancella TUTTO l'indice SBN!)" />
+            </pnx:List>
+            <pnx:List id="format" label="{i18n:Formato}" size="90" required="true">
+                <pnx:ListItem key="trc" value="ICCD 92" />
+                <pnx:ListItem key="iccdxml" value="ICCD XML" />
+                <pnx:ListItem key="sbn" value="SBN" />
+                <pnx:ListItem key="tei" value="TEI" />
+                <pnx:ListItem key="eadeac" value="EAD/EAC" />
+                <pnx:ListItem key="ead3" value="EAD3" />
+
+            </pnx:List>
+            <pnx:Checkbox id="overwriteScheda" label="Sovrascrivi schede se già presenti"/>
+            <pnx:Checkbox id="overwriteAuthority" label="Sovrascrivi authorities se già presenti"/>
+            <pnx:Checkbox id="partialValidation" label="Verifica integrità referenziale"/>
+            <pnx:Checkbox id="onlyValidation" label="Valida soltanto"/>
+            <pnx:Checkbox id="onlyRecord" label="Non importare le immagini"/>
+            <pnx:Checkbox id="onlyMedia" label="Importa solo le immagini"/>
+            <cms:FormButtonsPanel id="formButtons">
+                <pnx:HtmlButton label="{i18n:Import}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save" data="action=import" />
+            </cms:FormButtonsPanel>
+        </cms:FormEdit>
+        <pnx:JSscript folder="metafad/importer/js"/>
+    </mvc:State>
+
+    <mvc:State name="import">
+    </mvc:State>
+</mvc:Page>

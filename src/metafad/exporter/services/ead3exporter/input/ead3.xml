@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ead xsi:schemaLocation="http://ead3.archivists.org/schema/ http://www.san.beniculturali.it/tracciato/ead3.xsd" 
+    xmlns="http://ead3.archivists.org/schema/" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <control>
+        <recordid></recordid>
+        <filedesc>
+            <titlestmt>
+                <titleproper></titleproper>
+            </titlestmt>
+        </filedesc>
+        <maintenancestatus/>
+        <maintenanceagency>
+            <agencyname>ICAR</agencyname>
+        </maintenanceagency>
+        <languagedeclaration>
+            <language langcode="ita"/>
+            <script scriptcode="Italian"/>
+        </languagedeclaration>
+        <conventiondeclaration>
+            <citation>ISAD (G)</citation>
+        </conventiondeclaration>
+        <maintenancehistory>
+        </maintenancehistory>
+    </control>
+    <archdesc level="">
+        <did>
+        </did>
+    </archdesc>
+</ead>

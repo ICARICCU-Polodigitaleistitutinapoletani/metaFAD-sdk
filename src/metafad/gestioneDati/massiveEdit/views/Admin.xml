@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cmp="metafad.gestioneDati.boards.views.components.*"
+          xmlns:com="metafad.common.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php">
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:State name="index">
+        <pnx:Modifier target="tabs" attribute="visible" value="false" />
+        <com:DataGridSolr id="dataGrid" recordClassName="metafad.gestioneDati.massiveEdit.models.Model" enableSorting="true" cssClass="table table-bordered table-striped" fullTextSearch="true">
+          <pnx:DataGridColumn columnName="groupName_t" headerText="{i18n:Nome Gruppo}"/>
+          <pnx:DataGridColumn columnName="routing_t" headerText="{i18n:Scheda}"/>
+          <pnx:DataGridColumn columnName="document_id" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.CellEditDeleteMassive" />
+        </com:DataGridSolr>
+		</mvc:State>
+
+    <mvc:State name="delete">
+      <pnx:Hidden controllerName="metafad.gestioneDati.massiveEdit.controllers.*" />
+		</mvc:State>
+
+</mvc:Page>

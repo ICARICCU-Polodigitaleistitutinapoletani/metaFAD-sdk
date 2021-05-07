@@ -1,0 +1,377 @@
+swagger: '2.0'
+info:
+  description: Servizi IIIF Metafad
+  version: 1.0.0
+  title: Metafad - IIIF
+host: HOST
+basePath: /
+schemes:
+  - http
+  - https
+paths:
+  '/rest/metadata/{id}/manifest.json':
+    get:
+      tags:
+        - Servizi IIIF
+      summary: Manifest.json per visore IIIF
+      operationId: manifest
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters: 
+        - in: path
+          name: id
+          description: 'Id del record di cui ottenere il manifest.json'
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Manifest'
+  '/rest/iiif/{id}':
+    get:
+      tags:
+        - Servizi IIIF
+      summary: Metadati immagine
+      operationId: metadata
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters: 
+        - in: path
+          name: id
+          description: 'Id immagine'
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ImageMetadata'
+  '/rest/iiif/{id}/{region}/{size}/{rotation}/{quality}.{format}':
+    get:
+      tags:
+        - Servizi IIIF
+      summary: Immagine
+      operationId: image
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters: 
+        - in: path
+          name: id
+          description: 'Id immagine'
+          type: string
+          required: true
+        - in: path
+          name: region
+          description: "Region da mostrare dell'immagine"
+          type: string
+          required: true
+          default: full
+        - in: path
+          name: size
+          description: 'Dimensioni immagine'
+          type: string
+          required: true
+          default: full
+        - in: path
+          name: rotation
+          description: 'Rotazione immagine'
+          type: integer
+          required: true
+          default: 0
+        - in: path
+          name: quality
+          description: 'Qualità immagine'
+          type: string
+          required: true
+          default: default
+        - in: path
+          name: format
+          description: 'Formato immagine'
+          type: string
+          required: true
+          default: jpg
+      responses:
+        '200':
+          description: Immagine
+  '/rest/viewer/metadato/{id}':
+    get:
+      tags:
+        - Servizio Metadato strutturale
+      summary: Metadato strutturale del record {id}
+      operationId: stru
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters: 
+        - in: path
+          name: id
+          description: 'Id record'
+          type: string
+          required: true
+        - in: query
+          name: type
+          description: 'Tipo del record'
+          type: string
+          required: true
+        - in: query
+          name: init
+          type: integer
+          description: 'Immagine da cui iniziare a mostrare il metadato'
+          required: true
+          default: 0
+      responses:
+        '200':
+          description: Metadato strutturale
+          schema:
+            $ref: '#/definitions/Metadato'
+definitions:
+  docRispostaRicerca:
+    type: object
+    properties:
+      title:
+        type: string
+        description: 'Titolo del record'
+        example: 'Titolo'
+      url:
+        type: string
+        description: 'URL scheda dettaglio record'
+        example: 'https://dettaglio.com'
+  Manifest:
+    type: object
+    properties:
+      '@context':
+        type: string
+        default: 'http://iiif.io/api/presentation/2/context.json'
+      '@id':
+        type: string
+        example: 'http://HOST/metadata/1/manifest.json?type=archive&page='
+      '@type':
+        type: string
+        default: 'sc:Manifest'
+      'label':
+        type: string
+        example: 'Etichetta'
+      'description':
+        type: string
+        example: 'Descrizione'
+      'attribution':
+        type: string
+        example: 'Attribuzione'
+      'sequencese':
+        type: array
+        items:
+          $ref: '#/definitions/Sequence'
+  Sequence:
+    type: object
+    properties:
+      '@id':
+        type: string
+        default: 'Sequence'
+      '@type':
+        type: string
+        default: 'sc:Sequence'
+      'label':
+        type: string
+        default: 'Sequenza'
+      canvases:
+        type: array
+        items:
+          $ref: '#/definitions/Canvas'
+  Canvas:
+    type: object
+    properties:
+      '@id':
+        type: string
+        example: 'http://HOST/metadata/e5cd62a4-360c-4f98-b760-abfaeb5b89c3/canvas/e5cd62a4-360c-4f98-b760-abfaeb5b89c3.json'
+      '@type':
+        type: string
+        default: 'sc:Canvas'
+      'width': 
+        type: integer
+        description: Larghezza canvas
+        example: 1200
+      'height':
+        type: integer
+        description: Altezza canvas
+        example: 800
+      'images':
+        type: array
+        items:
+          $ref: '#/definitions/Image'
+      'thumbnail':
+        $ref: '#/definitions/Thumbnail'
+      'label':
+        type: string
+        example: '000001.jpg'
+  Image:
+    type: object
+    properties:
+      '@id':
+        type: string
+        example: 'http://HOST/metadata/e5cd62a4-360c-4f98-b760-abfaeb5b89c3/annotation/e5cd62a4-360c-4f98-b760-abfaeb5b89c3.json'
+      '@type':
+        type: string
+        default: 'oa:Annotation'
+      'motivation':
+        type: string
+        default: 'sc:painting'
+      'on':
+        type: string
+        example: 'http://HOST/metadata/e5cd62a4-360c-4f98-b760-abfaeb5b89c3/annotation/e5cd62a4-360c-4f98-b760-abfaeb5b89c3.json'
+      'resource':
+        $ref: '#/definitions/Resource'
+  Resource:
+    type: object
+    properties:
+      '@id':
+        type: string
+        example: 'http://HOST/iiif/institute@get@e5cd62a4-360c-4f98-b760-abfaeb5b89c3@original/full/full/0/default.jpg'
+      '@type':
+        type: string
+        default: 'dctypes:Image'
+      '@format':
+        type: string
+        default: 'image/jpeg'
+      'width':
+        type: integer
+        description: Larghezza immagine
+        example: 1200
+      'height':
+        type: integer
+        description: Altezza immagine
+        example: 800
+      'service':
+        $ref: '#/definitions/Service'
+  Service:
+    type: object
+    properties:
+      '@context':
+        type: string
+        default: 'http://iiif.io/api/image/2/context.json'
+      '@id':
+        type: string
+        example: 'http://HOST/iiif/institute@get@e5cd62a4-360c-4f98-b760-abfaeb5b89c3@original'
+      'profile':
+        type: string
+        default: 'http://iiif.io/api/image/2/level2.json'
+  Thumbnail:
+    type: object
+    properties:
+      '@id':
+        type: string
+        example: 'http://HOST/iiif/institute@get@e5cd62a4-360c-4f98-b760-abfaeb5b89c3@thumbnail/full/full/0/default.jpg'
+  ImageMetadata:
+    type: object
+    properties:
+      '@context':
+        type: string
+        default: 'http://iiif.io/api/presentation/2/context.json'
+      '@id':
+        type: string
+        example: 'http://HOST/iiif/institute%2540get%2540e5cd62a4-360c-4f98-b760-abfaeb5b89c3%2540original'
+      'protocol':
+        type: string
+        default: 'http://iiif.io/api/image'
+      'width':
+        type: integer
+        example: 1200
+      'height':
+        type: integer
+        example: 800
+  Metadato:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Id del record
+      physicalSTRU:
+        $ref: '#/definitions/PhysicalStru'
+      logicalSTRU:
+        type: array
+        description: Struttura Logica del metadato
+        items:
+          $ref: '#/definitions/LogicalStruNode'
+      licenses:
+        type: string
+        description: Indica eventuali licenze di vendita associate al record
+      info:
+        type: string
+        description: HTML descrittivo del record
+  PhysicalStru:
+    type: object
+    properties:
+      tot:
+        type: integer
+        description: Totale immagini
+        example: 1
+      image:
+        type: array
+        description: Lista di immagini
+        items:
+          $ref: '#/definitions/StruImage'
+  LogicalStruNode:
+    type: object
+    properties:
+      expanded:
+        type: boolean
+        description: Indica se il nodo deve essere espanso in apertura del metadato
+      folder:
+        type: boolean
+        description: Indica se il nodo è o meno una cartella
+      key:
+        type: string
+        description: Identificativo del nodo
+        example: "1572409242366"
+      title:
+        type: string
+        description: Titolo nodo
+        example: Titolo
+      children:
+        type: array
+        description: Lista eventuale di figli del nodo (avranno la stessa struttura del parent ed eventuali figli a loro volta)
+        items:
+          $ref: '#/definitions/LogicalStruNode'
+  StruImage:
+    type: object
+    properties:
+      thumbnail:
+        type: string
+        description: Url thumbnail immagine
+      title:
+        type: string
+        description: Titolo immagine
+      id:
+        type: string
+        description: Id immagine
+      type:
+        type: string
+        description: Tipo record
+        default: IMAGE
+      url:
+        type: string
+        description: Url resize immagine
+      label:
+        type: string
+        description: Etichetta personalizzata immagine
+      tile:
+        type: string
+        description: Eventuale url per zoom
+      ecommerce:
+        type: boolean
+        description: Indica se l'immagine è acquistabile

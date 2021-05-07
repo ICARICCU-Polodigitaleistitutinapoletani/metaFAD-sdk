@@ -1,0 +1,77 @@
+{
+    "##default1##": [
+        {
+            "xpath": "/icar-import:icar-import/icar-import:header/icar-import:systemId",
+            "hasDefault": true,
+            "default": "header_systemId"
+        }
+    ],
+    "##default2##": [
+        {
+            "xpath": "/icar-import:icar-import/icar-import:header/icar-import:systemTitle",
+            "hasDefault": true,
+            "default": "header_systemTitle"
+        }
+    ],
+    "##default3##": {
+        "xpath": "/icar-import:icar-import/icar-import:header/icar-import:contact",
+        "objectRoot": "icar-import:contact",
+        "defaultRoot": "header_contact",
+        "hasDefault": true,
+        "preserveNS": true,
+        "insertBefore": ["event"],
+        "object": [
+            {
+                "field": "contatto",
+                "xpath": "./icar-import:mail",
+                "default": "header_contact#mail",
+                "preserveNS": true
+            }
+        ]
+    },
+    "##default4##": [
+        {
+            "xpath": "/icar-import:icar-import/icar-import:header/icar-import:event",
+            "hasDefault": true,
+            "attribute": "eventType",
+            "default": "header_eventType"
+        }
+    ],
+    "##default5##": [
+        {
+            "xpath": "/icar-import:icar-import/icar-import:header/icar-import:event",
+            "hasDefault": true,
+            "attribute": "eventDate",
+            "utility": "generateIsoDate"
+        }
+    ],
+    "##default6##": [
+        {
+            "xpath": "/icar-import:icar-import/icar-import:header/icar-import:event/icar-import:agent",
+            "hasDefault": true,
+            "attribute": "agentType",
+            "default": "header_event_agentType"
+        }
+    ],
+    "##default7##": [
+        {
+            "xpath": "/icar-import:icar-import/icar-import:header/icar-import:event/icar-import:agent",
+            "hasDefault": true,
+            "default": "header_event_agent"
+        }
+    ],
+    "##default8##": [
+        {
+            "xpath": "/icar-import:icar-import/icar-import:header/icar-import:fileDesc/icar-import:title",
+            "hasDefault": true,
+            "default": "header_fileDesc_title"
+        }
+    ],
+    "##default9##": [
+        {
+            "xpath": "/icar-import:icar-import/icar-import:header/icar-import:fileDesc/icar-import:date",
+            "hasDefault": true,
+            "utility": "generateIsoDate"
+        }
+    ]
+}

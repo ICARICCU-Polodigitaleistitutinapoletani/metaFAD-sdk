@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model:Model
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:model="pinax.models.*/"
+    model:create="true"
+    model:tableName="docs_tbl"
+    model:autoGenerate="true"
+    model:usePrefix="true">
+
+    <model:Query name="getGroup">
+    <![CDATA[
+        SELECT *
+        FROM ##TABLE_NAME##
+        WHERE document_group = :group
+        ORDER BY document_sequence
+    ]]>
+    </model:Query>
+
+</model:Model>

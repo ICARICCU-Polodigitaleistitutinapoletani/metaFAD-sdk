@@ -1,0 +1,5 @@
+<?php
+class metafad_gestioneDati_boards_controllers_ShowDraft extends pinaxcms_contents_controllers_moduleEdit_EditDraft
+{
+
+}

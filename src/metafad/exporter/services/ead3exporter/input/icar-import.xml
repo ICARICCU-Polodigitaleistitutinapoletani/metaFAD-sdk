@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<icar-import:icar-import xmlns:xlink="http://www.w3.org/1999/xlink" 
+    xmlns:eac-cpf="urn:isbn:1-931666-33-4" 
+    xmlns:ead="http://ead3.archivists.org/schema/" 
+    xmlns:scons="http://www.san.beniculturali.it/scons2" 
+    xmlns:icar-import="http://www.san.beniculturali.it/icar-import" 
+    xmlns:dc="http://purl.org/dc/elements/1.1/" 
+    xmlns:mets="http://www.loc.gov/METS/" 
+    xmlns:metsrights="http://cosimo.stanford.edu/sdr/metsrights" 
+    xmlns:mix="http://www.loc.gov/mix/v20" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.san.beniculturali.it/icar-import http://www.san.beniculturali.it/tracciato/icar-import.xsd">
+    <icar-import:header>
+        <icar-import:systemId></icar-import:systemId>
+        <icar-import:systemTitle></icar-import:systemTitle>
+        <icar-import:event eventType="" eventDate="">
+            <icar-import:agent agentType=""></icar-import:agent>
+        </icar-import:event>
+        <icar-import:fileDesc>
+            <icar-import:title></icar-import:title>
+            <icar-import:date></icar-import:date>
+        </icar-import:fileDesc>
+    </icar-import:header>
+    <icar-import:listRecords>
+    </icar-import:listRecords>
+</icar-import:icar-import>

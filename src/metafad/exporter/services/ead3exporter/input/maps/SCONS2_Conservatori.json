@@ -1,0 +1,568 @@
+{
+    "compilazioneConvervatore": {
+        "xpath": "/scons:scons/scons:info/scons:evento",
+        "objectRoot": "scons:evento",
+        "defaultRoot": "compilazione",
+        "object": [
+            {
+                "field": "data",
+                "xpath": ".",
+                "attribute": "dataEvento",
+                "default": "compilazione#compilazione_data",
+                "utility": "addTimeString"
+            },
+            {
+                "field": "azione",
+                "xpath": ".",
+                "attribute": "tipoEvento",
+                "default": "compilazione#compilazione_azione",
+                "dictionary": "compilazione_azione"
+            },
+            {
+                "field": "tipologiaRedattore",
+                "xpath": "./scons:agente",
+                "attribute": "tipo",
+                "default": "compilazione#compilazione_tipo",
+                "utility" : "strlower"
+            },
+            {
+                "field": "##redattore##",
+                "xpath": "##placeholder##",
+                "default": "compilazione#compilazione_redattore",
+                "buildDefaultPath": true,
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractRedattore",
+                    "extractRedattorePath"
+                ],
+                "newNodeDeep": 2
+
+            }
+        ]
+    },
+    "acronimoSistema": [
+        {
+            "xpath": "/scons:scons/scons:identificativi/scons:identificativosistema"
+        }
+    ],
+    "identificativo": {
+        "xpath": "/scons:scons/scons:identificativi/scons:identificativo[@tipo='ICAR']",
+        "objectRoot": "scons:identificativo",
+        "forceObject": true,
+        "object": [
+            {
+                "field": "identificativo",
+                "xpath": ".",
+                "notCreateNewNodeIfExists": true,
+                "utility": "charsSubstitute",
+                "utilityParams": {
+                    "charsToReplace": " ",
+                    "newChar": "_"
+                }
+            },
+            {
+                "field": "identificativo",
+                "xpath": ".",
+                "attribute": "href",
+                "notCreateNewNodeIfExists": true,
+                "extractor": ["buildFELink"],
+                "extractorParams": {
+                    "model": "archivi.models.ProduttoreConservatore",
+                    "notLink": true
+                }
+            }
+        ]
+    },
+    "codiceIdentificativoPrecedente": {
+        "xpath": "/scons:scons/scons:identificativi/scons:altroidentificativo[@tipo='codiceidentificativoprecedente']",
+        "objectRoot": "scons:altroidentificativo",
+        "object": [
+            {
+                "field": "codice",
+                "xpath": "."
+            }
+        ]
+    },
+    "altriCodiciIdentificativi": {
+        "xpath": "/scons:scons/scons:identificativi/scons:altroidentificativo[@tipo='']",
+        "objectRoot": "scons:altroidentificativo",
+        "object": [
+            {
+                "field": "codice",
+                "xpath": "."
+            },
+            {
+                "field": "qualifica",
+                "attribute": "tipo"
+            }
+        ]
+    },
+    "ente_famiglia_denominazione": {
+        "TODO": "valori qualifica per validazione: principale, parallela, altraDenominazione, acronimo, uniformata, altro",
+        "xpath": "/scons:scons/scons:denominazione",
+        "objectRoot": "scons:denominazione",
+        "object": [
+            {
+                "field": "entitaDenominazione",
+                "xpath": "."
+            },
+            {
+                "field": "ente_famiglia_qualifica",
+                "attribute": "qualifica",
+                "hasDefault": true,
+                "default": "denominazione_qualifica",
+                "dictionary": "denominazione_qualifica"
+
+            },
+            {
+                "field": "ente_famiglia_linguaDenominazione",
+                "attribute": "lingua"
+            },
+            {
+                "field": "ente_famiglia_cronologia",
+                "xpath": ".",
+                "attribute": "data",
+                "extractor": [
+                    "extractOtherDate"
+                ]
+            }            
+        ]
+    },
+    "ente_famiglia_denominazione#": {
+        "xpath": "/scons:scons/scons:denominazione[@qualifica='acronimo']",
+        "objectRoot": "scons:denominazione",
+        "purgeIfEmpty": true,
+        "purgeField": "ente_famiglia_acronimo",
+        "object": [
+            {
+                "field": "ente_famiglia_acronimo",
+                "xpath": "."
+            }
+        ]
+    },
+    "famiglia_denominazione": {
+        "TODO": "controllare lingua (return object)",
+        "xpath": "/scons:scons/scons:denominazione",
+        "objectRoot": "scons:denominazione",
+        "object": [
+            {
+                "field": "entitaDenominazione",
+                "xpath": "."
+            },
+            {
+                "field": "famiglia_qualifica",
+                "attribute": "qualifica",
+                "hasDefault": true,
+                "default": "denominazione_qualifica",
+                "dictionary": "denominazione_qualifica"
+            },
+            {
+                "field": "ente_famiglia_linguaDenominazione",
+                "attribute": "lingua"
+            },
+            {
+                "field": "famiglia_cronologia",
+                "xpath": ".",
+                "attribute": "data",
+                "extractor": [
+                    "extractOtherDate"
+                ]
+            }
+        ]
+    },
+    "famiglia_denominazione#": {
+        "xpath": "/scons:scons/scons:denominazione[@qualifica='acronimo']",
+        "objectRoot": "scons:denominazione",
+        "purgeIfEmpty": true,
+        "purgeField": "famiglia_acronimo",
+        "object": [
+            {
+                "field": "famiglia_acronimo",
+                "xpath": "."
+            }
+        ]
+    },
+    "persona_denominazione": {
+        "TODO": "controllare lingua (return object)",
+        "xpath": "/scons:scons/scons:denominazione",
+        "objectRoot": "scons:denominazione",
+        "object": [
+            {
+                "field": "entitaDenominazione",
+                "xpath": "."
+            },
+            {
+                "field": "persona_qualifica",
+                "attribute": "qualifica",
+                "hasDefault": true,
+                "default": "denominazione_qualifica",
+                "dictionary": "denominazione_qualifica"
+            },
+            {
+                "field": "persona_linguaDenominazione",
+                "attribute": "lingua"
+            },
+            {
+                "field": "persona_cronologia",
+                "xpath": ".",
+                "attribute": "data",
+                "extractor": [
+                    "extractOtherDate"
+                ]
+            }
+        ]
+    },
+    "tipologiaChoice": [
+        {
+            "commento": "Importante: TipologiaChoice deve precedere TipologiaEnte affinché il valore di quest'ultimo sovrascriva il primo",
+            "xpath": "/scons:scons/scons:tipologia"
+        }
+    ],
+    "tipologiaEnte": [
+        {            "xpath": "/scons:scons/scons:tipologia",
+            "dictionary": "tipologia_ente"
+
+        }
+    ],
+    "sog_cons_sedi": {
+        "xpath": "/scons:scons/scons:localizzazioni/scons:localizzazione",
+        "objectRoot": "scons:localizzazione",
+        "hasDefault": true,
+        "object": [
+            {
+                "field": "sog_cons_sedi_tipologia",
+                "attribute": "principale",
+                "xpath": ".",
+                "utility": "detectTipologiaSede",
+                "utilityParams": {
+                    "attribute": "principale"
+                },
+                "default": "sede#sede_tipologia_principale"
+
+            },
+            {
+                "field": "sog_cons_sedi_tipologia",
+                "attribute": "consultazione",
+                "xpath": ".",
+                "utility": "detectTipologiaSede",
+                "utilityParams": {
+                    "attribute": "consultazione"
+                },
+                "default": "sede#sede_tipologia_consultazione"
+
+            },
+            {
+                "field": "sog_cons_sedi_tipologia",
+                "attribute": "privato",
+                "xpath": ".",
+                "utility": "emptyValue",
+                "default": "sede#sede_tipologia_privato"
+
+            },
+            {
+                "field": "sog_cons_sedi_tipologia",
+                "attribute": "identificativo",
+                "xpath": ".",
+                "setIdentificativoSede": true,
+                "utility": "detectTipologiaSede",
+                "utilityParams": {
+                    "attribute": "identificativo"
+                },
+                "default": "sede#sede_tipologia_identificativo"
+
+            },
+            {
+                "field": "##denominazione##",
+                "xpath": "./scons:denominazione",
+                "utility": "buildDenominazione",
+                "default": "sede#sede_denominazione"
+            },
+            {
+                "field": "sog_cons_sedi_comune",
+                "attribute": "comune",
+                "default": "sede#sede_indirizzo_comune",
+                "xpath": "./scons:indirizzo"
+            },
+            {
+                "field": "sog_cons_sedi_stato",
+                "attribute": "paese",
+                "xpath": "./scons:indirizzo",
+                "notCreateNewNodeIfExists": true,
+                "utility": "thesaurusStato"
+            },
+            {
+                "field": "sog_cons_sedi_regione",
+                "attribute": "regione",
+                "notCreateNewNodeIfExists": true,
+                "xpath": "./scons:indirizzo"
+            },
+            {
+                "field": "sog_cons_sedi_provincia",
+                "attribute": "provincia",
+                "notCreateNewNodeIfExists": true,
+                "xpath": "./scons:indirizzo"
+            },
+            {
+                "field": "sog_cons_sedi_via",
+                "attribute": "denominazioneStradale",
+                "notCreateNewNodeIfExists": true,
+                "xpath": "./scons:indirizzo"
+            },
+            {
+                "field": "sog_cons_sedi_numero",
+                "attribute": "numeroCivico",
+                "notCreateNewNodeIfExists": true,
+                "xpath": "./scons:indirizzo"
+            },
+            {
+                "field": "sog_cons_sedi_cap",
+                "attribute": "cap",
+                "notCreateNewNodeIfExists": true,
+                "xpath": "./scons:indirizzo"
+            },
+            {
+                "field": "sog_cons_sedi_giornoApertura",
+                "xpath": "./scons:orario",
+                "utility": "collapseOrariObject"
+            },
+            {
+                "field": "sog_cons_sedi_accessoDisabili",
+                "xpath": "./scons:accesso",
+                "utility": "addLabel",
+                "utilityParams": {
+                    "label": "Accesso disabili"
+                }
+            }
+        ]
+    },
+    "sog_cons_telefono": [
+        {
+            "xpath": "/scons:scons/scons:localizzazioni/scons:localizzazione/scons:contatto[@tipo='telefono']",
+            "appendToFirst": true,
+            "insertBefore": ["orario", "accesso"]
+        }
+    ],
+    "sog_cons_fax": [
+        {
+            "xpath": "/scons:scons/scons:localizzazioni/scons:localizzazione/scons:contatto[@tipo='fax']",
+            "appendToFirst": true,
+            "insertBefore": ["orario", "accesso"]
+        }
+    ],
+    "sog_cons_mail": [
+        {
+            "xpath": "/scons:scons/scons:localizzazioni/scons:localizzazione/scons:contatto[@tipo='mail']",
+            "appendToFirst": true,
+            "insertBefore": ["orario", "accesso"]
+        }
+    ],
+    "sog_cons_pec": [
+        {
+            "xpath": "/scons:scons/scons:localizzazioni/scons:localizzazione/scons:contatto[@tipo='pec']",
+            "appendToFirst": true,
+            "insertBefore": ["orario", "accesso"]
+        }
+    ],
+    "sog_cons_url": [
+        {
+            "xpath": "/scons:scons/scons:localizzazioni/scons:localizzazione/scons:contatto[@tipo='sitoweb']",
+            "appendToFirst": true,
+            "insertBefore": ["orario", "accesso"]
+        }
+    ],
+    "condizioniAccesso": [
+        {
+            "xpath": "/scons:scons/scons:localizzazioni/scons:localizzazione/scons:accesso",
+            "appendToFirst": true,
+            "joiner": "condizioniAccessoJoiner"
+        }
+    ],
+    "cenniStoriciIstituzionali": [
+        {
+            "xpath": "/scons:scons/scons:descrizione",
+            "simpleJoin": true,
+            "fieldsToJoin": [
+                "sog_cons_patrimonio",
+                "sog_cons_note"
+            ]
+        }
+    ],
+    "sog_cons_sedi#": {
+        "xpath": "/scons:scons/scons:servizi",
+        "objectRoot": "scons:servizi",
+        "onlyFirstRep": true,
+        "object": [
+            {
+                "field": "sog_cons_sedi_servizi",
+                "xpath": ".",
+                "utility": "collapseServiziObject"
+            }
+        ]
+    },
+    "soggettiConsConservatore": {
+        "TODO": "aggiungere link pubblico",
+        "xpath": "/scons:scons/scons:relazioni/scons:relazione[@tipo='CONS']",
+        "objectRoot": "scons:relazione",
+        "object": [
+            {
+                "field": "linkSoggettoConservatore",
+                "xpath": ".",
+                "extractor": [
+                    "extractFieldId"
+                ]
+            },
+            {
+                "field": "linkSoggettoConservatore",
+                "xpath": ".",
+                "attribute": "href",
+                "extractor": [
+                    "buildFELink"
+                ],
+                "extractorParams": {
+                    "model": "archivi.models.ProduttoreConservatore"
+                }
+            },
+            {
+                "field": "tipoRelazioneCons",
+                "xpath": ".",
+                "attribute": "tipoRelSC",
+                "utility": "lowerfirst"
+            },
+            {
+                "field": "cronologiaConservatore",
+                "xpath": ".",
+                "attribute": "data",
+                "extractor": [
+                    "extractOtherDate"
+                ]
+            }
+        ]
+    },
+    "riferimentiWebConvervatore": {
+        "xpath": "/scons:scons/scons:relazioni/scons:relazione[@tipo='URL']",
+        "objectRoot": "scons:relazione",
+        "object": [
+            {
+                "field": "rifWeb_Conserv_url",
+                "xpath": "."
+            },
+            {
+                "field": "rifWeb_Conserv_denominazioneSitoWeb",
+                "xpath": ".",
+                "notCreateNewNodeIfExists": true
+            },
+            {
+                "field": "rifWeb_Conserv_descrizione",
+                "xpath": ".",
+                "notCreateNewNodeIfExists": true
+            },
+            {
+                "field": "rifWeb_Conserv_url",
+                "xpath": ".",
+                "attribute": "href",
+                "notCreateNewNodeIfExists": true
+            }
+        ]
+    },
+    "complessiArchivisticiConservatore": {
+        "TODO": "aggiungere link pubblico",
+        "xpath": "/scons:scons/scons:relazioni/scons:relazione[@tipo='COMPL']",
+        "objectRoot": "scons:relazione",
+        "object": [
+            {
+                "field": "linkComplessiArchivistici",
+                "xpath": ".",
+                "extractor": [
+                    "extractComplessoId"
+                ]
+            },
+            {
+                "field": "linkComplessiArchivistici",
+                "xpath": ".",
+                "attribute": "href",
+                "extractor": [
+                    "buildFELink"
+                ],
+                "extractorParams": {
+                    "model": "archivi.models.ComplessoArchivistico"
+                }
+            }
+        ]
+    },
+    "riferimentiBibliograficiConvervatore": {
+        "xpath": "/scons:scons/scons:relazioni",
+        "objectRoot": "scons:relazioni",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "inputRiferimentiBibliografici",
+                "xpath": "./scons:relazione[@tipo='BIBTEXT']",
+                "extractor": [
+                    "extractBiblioText"
+                ]
+            }
+        ]
+    },
+    "riferimentiBibliograficiConvervatore#": {
+        "commento": "Importante: l'attributo href va aggiunto come ultimo campo",
+        "xpath": "/scons:scons/scons:relazioni",
+        "objectRoot": "scons:relazioni",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "inputRiferimentiBibliografici",
+                "xpath": "./scons:relazione[@tipo='BIBSBN']",
+                "extractor": [
+                    "extractBiblioSBN"
+                ]
+            },
+            {
+                "field": "inputRiferimentiBibliografici",
+                "xpath": "./scons:relazione[@tipo='BIBSBN']",
+                "attribute": "href",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractBiblioSBNURI"
+                ]
+            }
+        ]
+    },
+    "fontiArchivisticheConvervatore": {
+        "xpath": "/scons:scons/scons:relazioni",
+        "objectRoot": "scons:relazioni",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "inputFontiArchivistiche",
+                "xpath": "./scons:relazione[@tipo='FONTETEXT']",
+                "extractor": [
+                    "extractFonteText"
+                ]
+            }
+        ]
+    },
+    "fontiArchivisticheConvervatore#": {
+        "commento": "Importante: l'attributo href va aggiunto come ultimo campo",
+        "xpath": "/scons:scons/scons:relazioni",
+        "objectRoot": "scons:relazioni",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "inputFontiArchivistiche",
+                "xpath": "./scons:relazione[@tipo='FONTEURI']",
+                "extractor": [
+                    "extractFonteURI"
+                ]
+            },
+            {
+                "field": "inputFontiArchivistiche",
+                "xpath": "./scons:relazione[@tipo='FONTEURI']",
+                "attribute": "href",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractFonteURIURI"
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:c="metafad.iccd.views.components.*"
+    xmlns:cmp="metafad.gestioneDati.boards.views.components.*"
+    xmlns:com="metafad.common.views.components.*"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:iccd="metafad.thesaurus.views.components.*"
+    id="Page"
+    controllerName="##page_controller_name##"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Page.php">
+
+    <pnx:templateDefine name="dataGridId" defaultValue="dataGrid" />
+    <pnx:templateDefine name="model" required="true" />
+    <pnx:templateDefine name="grid_fields" required="true" />
+    <pnx:templateDefine name="form_fields" required="true" />
+    <pnx:templateDefine name="filterByInstitute" defaultValue="true" />
+    <pnx:templateDefine name="setLastSearch" defaultValue="false" />
+    <pnx:templateDefine name="custom_states" required="false" defaultValue="" />
+    <pnx:templateDefine name="extra_components" required="false" defaultValue="" />
+    <pnx:templateDefine name="primary_key" required="false" defaultValue="document_id" />
+    <pnx:templateDefine name="page_controller_name" required="false" defaultValue="" />
+    <pnx:templateDefine name="controller_name" required="false" defaultValue="pinaxcms.contents.controllers.moduleEdit.*" />
+    <pnx:templateDefine name="documentRenderCell" required="false" defaultValue="metafad.common.views.renderer.CellEditDraftDeleteNormalize" />
+    <pnx:templateDefine name="button_tab_visible" required="false" defaultValue="true" />
+    <pnx:templateDefine name="templateEnabled" required="false" defaultValue="false" />
+    <pnx:templateDefine name="show_external_id" required="false" defaultValue="true" />
+    <pnx:templateDefine name="autocompleteController" required="false" defaultValue="" />
+    <pnx:templateDefine name="multiLanguage" required="false" defaultValue="false" />
+
+    <pnx:Import src="_common.xml" />
+
+    <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs" cssClassCurrent="active" addQueryString="true" visible="true" editableRegion="contentTabs" />
+
+    <mvc:State name="index">
+        <pnx:Modifier target="tabs" attribute="visible" value="false" />
+        <com:DataGridSolr id="##dataGridId##" enableSorting="true" filterByInstitute="##filterByInstitute##" setLastSearch="##setLastSearch##" recordClassName="##model##" cssClass="table table-bordered table-striped" fullTextSearch="true" keyAndLabel="true"
+                          multiLanguage="##multiLanguage##">
+            <pnx:DataGridColumn columnName="##primary_key##" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.SelectionFlag" width="20px" />
+            ##grid_fields##
+            <pnx:DataGridColumn columnName="##primary_key##" sortable="false" searchable="false" cssClass="actions" renderCell="##documentRenderCell##" />
+        </com:DataGridSolr>
+
+        <cmp:AddButton id="dataGridAddButton" acl="*,new" templateEnabled="false" label="" routeUrl="actionsMVCAdd" editableRegion="actions" recordClassName="##model##" cssClass="dataGridAddButton" dataGridAjaxId="##dataGridId##" />
+    </mvc:State>
+
+    <mvc:State name="edit,editDraft" label="{i18n:Scheda}" url="linkEdit">
+        ##extra_components##
+        <pnx:JSscript folder="metafad/common/views/js/previewPopup" />
+        <c:FormEdit id="editForm" newCode="true" controllerName="##controller_name##">
+            <pnx:Hidden id="__id" />
+            <pnx:Hidden id="__model" value="##model##" />
+			<pnx:Hidden id="instituteKey" />
+            ##form_fields##
+            <cms:FormButtonsPanel id="formButtons">
+                <cmp:PreviousTabButton visible="##button_tab_visible##"/>
+                <pnx:HtmlButton label="{i18n:PNX_PUBLISH}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save-novalidation" data="action=save" acl="*,publish" />
+                <pnx:HtmlButton label="{i18n:PNX_PUBLISH_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveClose" acl="*,publish" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraft" acl="*,editDraft"/>
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraftClose" acl="*,editDraft"/>
+                <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" />
+                <pnx:HtmlButton label="{i18n:Anteprima}" type="button" cssClass="btn btn-flat js-pinaxcms-preview" data="action=preview" />
+                <pnx:HtmlButton label="{i18n:Valida}" type="button" cssClass="btn btn-flat js-pinaxcms-save" data="action=validate" acl="*,publish"/>
+                <cmp:NextTabButton visible="##button_tab_visible##"/>
+            </cms:FormButtonsPanel>
+        </c:FormEdit>
+    </mvc:State>
+ 
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="##controller_name##" />
+    </mvc:State>
+    
+    <mvc:State name="normalize">
+        <pnx:Hidden controllerName="metafad.gestioneDati.boards.controllers.Normalize" />
+    </mvc:State>
+
+    ##custom_states##
+</mvc:Page>

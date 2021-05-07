@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:iccd="metafad.thesaurus.views.components.*"
+          xmlns:cmp="metafad.gestioneDati.boards.views.components.*"
+          xmlns:com="metafad.common.views.components.*"
+          xmlns:c="metafad.iccd.views.components.*"
+          xmlns:ss="metafad.gestioneDati.schedeSemplificate.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:State name="index">
+      <com:DataGridSolr id="dataGridForms" recordClassName="metafad.opac.models.Model"
+                        cssClass="table table-bordered table-striped" enableSorting="true"
+                        fullTextSearch="true" filterByInstitute="true" >
+        <pnx:DataGridColumn columnName="name" headerText="{i18n:Nome}" sortable="false" />
+        <pnx:DataGridColumn columnName="section" headerText="{i18n:Sezione}" sortable="false" />
+        <pnx:DataGridColumn id="instituteColumn" columnName="instituteKey_s" headerText="{i18n:Istituto}" sortable="false" searchable="false"
+                            renderCell="metafad.opac.views.renderer.InstituteCell"/>
+        <pnx:DataGridColumn columnName="document_detail_status" width="150px" sortable="false" searchable="false"
+                            headerText="{i18n:Pubblicata}" cssClass="center"
+                            renderCell="metafad.common.views.renderer.CellDocPublished"/>
+        <pnx:DataGridColumn columnName="document_id" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.CellEditDraftDelete" />
+      </com:DataGridSolr>
+      <iccd:AddButton buttonId="dataGridAddButton" label="" acl="*,edit" routeUrl="actionsMVCAdd" editableRegion="actions" add="Aggiungi ricerca" recordClassName="metafad.opac.models.Model" dataGridAjaxId="dataGridForms"/>
+    </mvc:State>
+
+    <mvc:State name="edit">
+      <c:FormEdit id="editForm" newCode="true" controllerName="metafad.opac.controllers.*">
+        <pnx:Hidden id="__id"/>
+        <pnx:Hidden id="__model" value="metafad.opac.models.Model"/>
+
+        <pnx:Input id="name" label="{i18n:Nome}" required="true"/>
+
+        <pnx:Input id="labelFE" label="{i18n:Etichetta (Front End)}"/>
+
+        <pnx:List id="section" label="{i18n:Sezione}" required="true" emptyValue="">
+          <pnx:ListItem key="bibliografico" value="Bibliografico" selected="true"/>
+          <pnx:ListItem key="archivi" value="Archivi"/>
+          <pnx:ListItem key="patrimonio" value="Patrimonio"/>
+		  <pnx:ListItem key="metaindice" value="Metaindice"/>
+        </pnx:List>
+
+        <pnx:List id="archiveType" label="{i18n:Tipologia}">
+          <pnx:ListItem key="ca" value="Complessi Archivistici" selected="true"/>
+          <pnx:ListItem key="ud" value="Unità Documentarie"/>
+          <pnx:ListItem key="ua" value="Unità Archivistiche"/>
+          <pnx:ListItem key="u" value="Unità A/D"/>
+        </pnx:List>
+
+        <pnx:Fieldset id="fields" label="Campi" data="type=repeat;collapsable=false;sortable=true;repeatMin=0;customAddRowLabel=Aggiungi riga">
+            <pnx:Input id="label" label="Etichetta" maxLength="250"/>
+            <pnx:Input id="linkedFields" label="Campi collegati" data="type=selectfrom;multiple=false;add_new_values=false;proxy=metafad.opac.models.proxy.OpacFieldProxy;return_object=false"/>
+            <pnx:Input id="accordion" label="Accordion" maxLength="250"/>
+            <pnx:List id="fieldType" label="{i18n:Tipo di campo}" emptyValue="">
+              <pnx:ListItem key="open" value="Campo dizionario aperto" selected="true"/>
+              <pnx:ListItem key="closed" value="Campo dizionario chiuso"/>
+              <pnx:ListItem key="list" value="Lista"/>
+              <pnx:ListItem key="text" value="Testo libero"/>
+              <pnx:ListItem key="checkbox" value="Checkbox"/>
+            </pnx:List>
+        </pnx:Fieldset>
+
+        <cms:FormButtonsPanel>
+          <pnx:HtmlButton label="{i18n:PNX_PUBLISH}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save-novalidation" data="action=save" acl="*,edit" />
+          <pnx:HtmlButton label="{i18n:PNX_PUBLISH_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveClose" acl="*,edit" />
+          <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraft" acl="*,editDraft" />
+          <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraftClose" acl="*,editDraft" />
+          <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel" />
+        </cms:FormButtonsPanel>
+      </c:FormEdit>
+
+      <pnx:JSscript folder="metafad/opac/js"/>
+    </mvc:State>
+
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="metafad.opac.controllers.*" />
+    </mvc:State>
+</mvc:Page>

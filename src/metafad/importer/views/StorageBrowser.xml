@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf8"?>
+<mvc:Page id="Page"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:cmp="metafad.importer.views.components.*"
+    controllerName="storageBrowser"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Popup.php">
+
+    <mvc:State name="index">
+        <cmp:CustomStorageBrowser id="storageBrowser" />
+    </mvc:State>
+</mvc:Page>

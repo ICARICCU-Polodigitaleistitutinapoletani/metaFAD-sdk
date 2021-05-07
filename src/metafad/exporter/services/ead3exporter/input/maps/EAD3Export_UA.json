@@ -1,0 +1,379 @@
+{
+    "altriCodiciIdentificativi": {
+        "xpath": "./ead:did/ead:unitid",
+        "objectRoot": "ead:unitid",
+        "purgeIfEmpty": true,
+        "purgeField": "altriCodici_codice",
+        "object": [
+            {
+                "field": "altriCodici_codice",
+                "xpath": "."
+            },
+            {
+                "field": "altriCodici_qualifica",
+                "attribute": "label",
+                "xpath": "."
+            }
+        ]
+    },
+    "ordinamentoGlobale": [
+        {
+            "xpath": "./ead:did/ead:unitid[@label='numeroOrdinamento']"
+        }
+    ],
+    "segnaturaAttuale": [
+        {
+            "xpath": "./ead:did/ead:unitid[@label='segnaturaAttuale']"
+        }
+    ],
+    "segnaturaPrecedente": {
+        "xpath": "./ead:did/ead:unitid[@label='segnaturaPrecedente']",
+        "objectRoot": "ead:unitid",
+        "purgeIfEmpty": true,
+        "purgeField": "segnatura",
+        "object": [
+            {
+                "field": "segnatura",
+                "xpath": "."
+            }
+        ]
+    },
+    "codiceDiClassificazione": [
+        {
+            "xpath": "./ead:did/ead:unitid[@label='codiceClassificazione']"
+        }
+    ],
+    "denominazione": [
+        {
+            "xpath": "./ead:did/ead:unittitle[@localtype='titolo']"
+        }
+    ],
+    "titoloAttribuito": [
+        {
+            "xpath": "./ead:did/ead:unittitle[@localtype='titoloAttribuito']"
+        }
+    ],
+    "livelloDiDescrizione": [
+        {
+            "xpath": ".",
+            "attribute": "level",
+            "utility": "detectRecordLevel"
+        },
+        {
+            "xpath": ".",
+            "attribute": "otherlevel",
+            "utility": "detectRecordOtherLevel"
+        }
+    ],
+    "cronologia": {
+        "commento": "L'ordine conta: prima il remoto, poi il recente",
+        "xpath": "./ead:did/ead:unitdatestructured",
+        "objectRoot": "ead:unitdatestructured",
+        "cronologia": true,
+        "cronologiaMultiple": false,
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "##cronologia##",
+                "xpath": "##placeholder##",
+                "extractor": [
+                    "extractDataERemoto",
+                    "extractPathCronologiaRemoto"
+                ]
+            },
+            {
+                "field": "##cronologia##",
+                "xpath": "##placeholder##",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractDataERecente",
+                    "extractPathCronologiaRecente"
+                ]
+            }
+        ]
+    },
+    "cronologia#": {
+        "commento": "L'ordine conta: prima il remoto, poi il recente",
+        "xpath": "./ead:did/ead:unitdatestructured/ead:dateset",
+        "objectRoot": "ead:unitdatestructured/ead:dateset",
+        "cronologia": true,
+        "cronologiaMultiple": true,
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "##cronologia##",
+                "xpath": "##placeholder##",
+                "extractor": [
+                    "extractDataERemoto",
+                    "extractPathCronologiaRemoto"
+                ]
+            },
+            {
+                "field": "##cronologia##",
+                "xpath": "##placeholder##",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractDataERecente",
+                    "extractPathCronologiaRecente"
+                ]
+            }
+        ]
+    },
+    "descrizioneContenuto": [
+        {
+            "xpath": "./ead:scopecontent/ead:p"
+        }
+    ],
+    "criteriOrdinamento": [
+        {
+            "xpath": "./ead:arrangement/ead:p"
+        }
+    ],
+    "condizioniAccessoRiproduzione": [
+        {
+            "xpath": "./ead:accessrestrict/ead:p"
+        }
+    ],
+    "documentazioneArchivioCollegata": {
+        "TODO": "risolvere problema caratteri URL e verificare se in questo modo il valore nel tag ref viene preso",
+        "xpath": "./ead:relatedmaterial/ead:archref/ead:ref",
+        "objectRoot": "ead:relatedmaterial/ead:archref/ead:ref",
+        "object": [
+            {
+                "field": "doc_url",
+                "xpath": "."
+            },
+            {
+                "field": "doc_descrizione",
+                "xpath": ".",
+                "notCreateNewNodeIfExists": true
+            },
+            {
+                "field": "doc_denominazione",
+                "xpath": ".",
+                "notCreateNewNodeIfExists": true
+            },
+            {
+                "field": "doc_url",
+                "xpath": ".",
+                "attribute": "href",
+                "notCreateNewNodeIfExists": true
+            }
+        ]
+    },
+    "riferimentiBibliografici": {
+        "xpath": "./ead:relations",
+        "objectRoot": "ead:relations",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "linkRiferimentiBibliografici",
+                "xpath": "./ead:relation[@relationtype='otherrelationtype'][@otherrelationtype='BIBID']/ead:relationentry",
+                "extractor": [
+                    "extractBiblioId"
+                ]
+            }
+        ]
+    },
+    "riferimentiBibliografici#": {
+        "xpath": "./ead:relations",
+        "objectRoot": "ead:relations",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "linkRiferimentiBibliografici",
+                "xpath": "./ead:relation[@relationtype='otherrelationtype'][@otherrelationtype='BIBTEXT']/ead:relationentry",
+                "extractor": [
+                    "extractBiblioText"
+                ]
+            }
+        ]
+    },
+    "riferimentiBibliografici##": {
+        "commento": "Importante: l'attributo href va aggiunto come ultimo campo",
+        "xpath": "./ead:relations",
+        "objectRoot": "ead:relations",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "linkRiferimentiBibliografici",
+                "xpath": "./ead:relation[@relationtype='otherrelationtype'][@otherrelationtype='BIBSBN']/ead:relationentry",
+                "extractor": [
+                    "extractBiblioSBN"
+                ]
+            },
+            {
+                "field": "linkRiferimentiBibliografici",
+                "xpath": "./ead:relation[@relationtype='otherrelationtype'][@otherrelationtype='BIBSBN']",
+                "attribute": "href",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractBiblioSBNURI"
+                ]
+            }
+        ]
+    },
+    "fontiArchivistiche": {
+        "xpath": "./ead:relations",
+        "objectRoot": "ead:relations",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "linkFontiArchivistiche",
+                "xpath": "./ead:relation[@relationtype='otherrelationtype'][@otherrelationtype='FONTEID']/ead:relationentry",
+                "extractor": [
+                    "extractFonteId"
+                ]
+            }
+        ]
+    },
+    "fontiArchivistiche#": {
+        "xpath": "./ead:relations",
+        "objectRoot": "ead:relations",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "linkFontiArchivistiche",
+                "xpath": "./ead:relation[@relationtype='otherrelationtype'][@otherrelationtype='FONTETEXT']/ead:relationentry",
+                "extractor": [
+                    "extractFonteText"
+                ]
+            }
+        ]
+    },
+    "fontiArchivistiche##": {
+        "commento": "Importante: l'attributo href va aggiunto come ultimo campo",
+        "xpath": "./ead:relations",
+        "objectRoot": "ead:relations",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "linkFontiArchivistiche",
+                "xpath": "./ead:relation[@relationtype='otherrelationtype'][@otherrelationtype='FONTEURI']/ead:relationentry",
+                "extractor": [
+                    "extractFonteURI"
+                ]
+            },
+            {
+                "field": "linkFontiArchivistiche",
+                "xpath": "./ead:relation[@relationtype='otherrelationtype'][@otherrelationtype='FONTEURI']",
+                "attribute": "href",
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractFonteURIURI"
+                ]
+            }
+        ]
+    },
+    "riferimentiWeb": {
+        "xpath": "./ead:relations",
+        "objectRoot": "ead:relations",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "rif_url",
+                "xpath": "./ead:relation[@relationtype='otherrelationtype'][@otherrelationtype='URL']/ead:relationentry"
+            },
+            {
+                "field": "rif_descrizione",
+                "xpath": "./ead:relation[@relationtype='otherrelationtype'][@otherrelationtype='URL']/ead:relationentry",
+                "notCreateNewNodeIfExists": true
+            },
+            {
+                "field": "rif_denominazioneSitoWeb",
+                "xpath": "./ead:relation[@relationtype='otherrelationtype'][@otherrelationtype='URL']/ead:relationentry",
+                "notCreateNewNodeIfExists": true
+            },
+            {
+                "field": "rif_url",
+                "xpath": "./ead:relation[@relationtype='otherrelationtype'][@otherrelationtype='URL']",
+                "attribute": "href",
+                "notCreateNewNodeIfExists": true
+            }
+        ]
+    },
+    "toponimi": {
+        "xpath": "./ead:controlaccess",
+        "objectRoot": "ead:controlaccess",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "intestazione",
+                "xpath": "./ead:geogname/ead:part[@localtype='voceIndice']",
+                "extractor": [
+                    "extractToponimoDenom"
+                ]
+            },
+            {
+                "field": "intestazione",
+                "xpath": "./ead:geogname/ead:part[@localtype='presentName']",
+                "notCreateNewNodeIfExists": true,
+                "newNodeDeep": 2,
+                "extractor": [
+                    "extractToponimoComuneAtt"
+                ]
+            },
+            {
+                "field": "intestazione",
+                "xpath": "./ead:geogname/ead:part[@localtype='historicalName']",
+                "notCreateNewNodeIfExists": true,
+                "newNodeDeep": 2,
+                "extractor": [
+                    "extractToponimoDenomCoeva"
+                ]
+            }
+        ]
+    },
+    "antroponimi": {
+        "xpath": "./ead:controlaccess",
+        "objectRoot": "ead:controlaccess",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "intestazione",
+                "xpath": "./ead:persname/ead:part[@localtype='voceIndice']",
+                "extractor": [
+                    "extractAntroponimoDenom"
+                ]
+            }
+        ]
+    },
+    "enti": {
+        "xpath": "./ead:controlaccess",
+        "objectRoot": "ead:controlaccess",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "intestazione",
+                "xpath": "./ead:corpname/ead:part[@localtype='voceIndice']",
+                "extractor": [
+                    "extractEnteDenom"
+                ]
+            }
+        ]
+    },
+    "compilazione": {
+        "xpath": "./ead:processinfo[@localtype='compilatori']",
+        "objectRoot": "ead:processinfo",
+        "notCreateNewNodeIfExists": true,
+        "object": [
+            {
+                "field": "redattore",
+                "xpath": "./ead:processinfo[@localtype='compilatore']/ead:p/ead:persname/ead:part[@localtype='compilatore']"
+            },
+            {
+                "field": "azione",
+                "xpath": "./ead:processinfo[@localtype='compilatore']/ead:p/ead:persname/ead:part[@localtype='tipoIntervento']",
+                "notCreateNewNodeIfExists": true,
+                "newNodeDeep": 4,
+                "dictionary": "compilazione_azione"
+            },
+            {
+                "field": "data",
+                "xpath": "./ead:processinfo[@localtype='compilatore']/ead:p/ead:date[@localtype='dataIntervento']",
+                "notCreateNewNodeIfExists": true,
+                "newNodeDeep": 3
+            }
+        ]
+    }
+}

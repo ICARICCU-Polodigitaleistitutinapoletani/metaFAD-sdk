@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cmp="metafad.sbn.modules.sbnunimarc.views.components.*"
+          xmlns:sbn="metafad.gestioneDati.sbnweb.views.components.*"
+          controllerName="metafad.gestioneDati.sbnweb.controllers.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Popup.php">
+
+    <mvc:State name="index">
+        <pnx:Form id="editForm" action="metafad.gestioneDati.sbnweb_popup">
+            <pnx:Panel id="text-sbn" skin="sbnsearch.html"/>
+            <pnx:Panel cssClass="form-group input-bid">
+              <pnx:Panel cssClass="col-sm-12">
+                <pnx:Hidden id="type" />
+                <pnx:Input id="BID" cssClass="inputBid form-control required" applyFormItemTemplate="false"/>
+              </pnx:Panel>
+            </pnx:Panel>
+            <pnx:Panel id="formButtons" cssClass="formButtons">
+                <pnx:HtmlButton id="btnNext" label="Prosegui" value="show" name="action" cssClass="btn btn-primary" />
+            </pnx:Panel>
+        </pnx:Form>
+    </mvc:State>
+
+    <mvc:State name="show">
+        <sbn:SBNForm skin="sbnweb.html"/>
+    </mvc:State>
+
+
+</mvc:Page>

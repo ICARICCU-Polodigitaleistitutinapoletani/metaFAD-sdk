@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:mvc="pinax.mvc.components.*"
+    controllerName="metafad.uploader.controllers.*"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml" />
+
+    <mvc:State name="index">
+      <cms:FormEdit id="editForm" enctype="multipart/form-data">
+        <pnx:Input id="fileuploader" label="{i18n:PNX_UPLOAD}" data="type=file;fieldsetid=medias;maxfiles=1;acceptedfiles=.zip;maxfilesize=2048" />
+        <pnx:Fieldset id="medias" label="File caricato su server" data="type=repeat;collapsable=false;noAddRowButton=true">
+            <pnx:Hidden id="__uploadFilename" />
+            <pnx:Hidden id="__originalFileName" />
+        </pnx:Fieldset>
+        <pnx:List id="format" label="{i18n:Formato}" size="90" required="true">
+            <pnx:ListItem key="sbn" value="SBN" />
+            <pnx:ListItem key="sbnaut" value="SBN (AUT)" />
+        </pnx:List>
+        <cms:FormButtonsPanel id="formButtons">
+  				<pnx:HtmlButton label="{i18n:Upload}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save" data="action=upload" />
+  			</cms:FormButtonsPanel>
+      </cms:FormEdit>
+    </mvc:State>
+
+    <mvc:State name="upload">
+    </mvc:State>
+</mvc:Page>

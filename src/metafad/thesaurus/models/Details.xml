@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model:Model
+        xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+        xmlns:model="pinax.models.*/"
+        model:tableName="thesaurusdetails_tbl" model:usePrefix="true">
+
+    <model:Query name="deleteTerms">
+    <![CDATA[
+        DELETE FROM ##TABLE_NAME##
+        WHERE thesaurusdetails_FK_thesaurus_id = :dictionaryId
+    ]]>
+    </model:Query>
+
+    <model:Query name="deleteTermsByKey">
+    <![CDATA[
+        DELETE FROM ##TABLE_NAME##
+        WHERE thesaurusdetails_FK_thesaurus_id = :id AND thesaurusdetails_key = :key 
+    ]]>
+    </model:Query>
+
+    <model:Query name="instituteFilter">
+    <![CDATA[
+        SELECT * FROM thesaurusdetails_tbl
+        WHERE thesaurusdetails_FK_thesaurus_id = :thesaurusId
+        AND (thesaurusdetails_instituteKey = :institute_key OR thesaurusdetails_instituteKey IS NULL)
+    ]]>
+    </model:Query>
+</model:Model>
+

@@ -1,0 +1,43 @@
+{
+    "##default1##": {
+        "xpath": "/scons:scons/scons:info/scons:evento",
+        "objectRoot": "scons:evento",
+        "defaultRoot": "compilazione",
+        "hasDefault": true,
+        "object": [
+            {
+                "field": "data",
+                "xpath": ".",
+                "attribute": "dataEvento",
+                "hasDefault": true,
+                "utility": "generateIsoDate"
+            },
+            {
+                "field": "azione",
+                "xpath": ".",
+                "attribute": "tipoEvento",
+                "default": "compilazione#compilazione_azione",
+                "dictionary": "compilazione_azione"
+            },
+            {
+                "field": "tipologiaRedattore",
+                "xpath": "./scons:agente",
+                "attribute": "tipo",
+                "default": "compilazione#compilazione_tipo",
+                "utility": "strlower"
+            },
+            {
+                "field": "##redattore##",
+                "xpath": "##placeholder##",
+                "default": "compilazione#compilazione_redattore",
+                "buildDefaultPath": true,
+                "notCreateNewNodeIfExists": true,
+                "extractor": [
+                    "extractRedattore",
+                    "extractRedattorePath"
+                ],
+                "newNodeDeep": 2
+            }
+        ]
+    }
+}

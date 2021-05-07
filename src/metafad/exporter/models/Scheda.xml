@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model:Model
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:model="pinax.models.*/"
+    model:tableName="documents_tbl"
+    model:usePrefix="false">
+
+        <model:Query name="docType">
+        <![CDATA[
+            SELECT * FROM `documents_tbl` WHERE `document_id` = ?
+        ]]>
+        </model:Query>
+
+</model:Model>

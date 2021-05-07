@@ -1,0 +1,391 @@
+{
+    "pageId": {
+        "type": "constant",
+        "value": "archivi-schedastrumentoricerca"
+    },
+    "__model": {
+        "type": "constant",
+        "value": "archivi.models.SchedaStrumentoRicerca"
+    },
+    "model": {
+        "type": "constant",
+        "value": "archivi.models.SchedaStrumentoRicerca"
+    },
+    "externalID": {
+        "TODO": "testare aggancio tramite externalID2",
+        "type": "simple",
+        "xpath": "./control/recordid/text()"
+    },
+    "externalID2": {
+        "type": "simple",
+        "xpath": "./control/representation/@href"
+    },
+    "codiceIdentificativoPrecedente": {
+        "type": "composite",
+        "xpath": "./control/otherrecordid | ./control/recordid",
+        "repeatable": true,
+        "transform": {
+            "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+        },
+        "struct": {
+            "codice": {
+                "type": "simple",
+                "xpath": "./text()"
+            }
+        }
+    },
+    "titoloNormalizzato": {
+        "type": "simple",
+        "xpath": "./control/filedesc/titlestmt/titleproper[not(@localtype)]/text()"
+    },
+    "titoloOriginaleStrumento": {
+        "type": "simple",
+        "xpath": "./control/filedesc/titlestmt/titleproper[@localtype='original']/text()"
+    },
+    "tipologiaScelta": {
+        "type": "simple",
+        "xpath": "./control/filedesc/editionstmt/edition[@localtype='typology']/text()",
+        "vocabulary": "tipologia_tipologia"
+    },
+    "tipoSupporto": {
+        "type": "simple",
+        "xpath": "./control/filedesc/editionstmt/edition[@localtype='support']/text()",
+        "vocabulary": "descrizioneEstrinseca_tipoSupporto"
+    },
+    "edito": {
+        "type": "simple",
+        "xpath": "./control/filedesc/editionstmt/edition[@localtype='published']/text()",
+        "vocabulary": "modalitaDiRedazione_edito"
+    },
+    "modalitaRedazioneScelta": {
+        "type": "simple",
+        "xpath": "./control/filedesc/editionstmt/edition[@localtype='tipologia']/text()",
+        "vocabulary": "modalitaDiRedazione_tipologia"
+    },
+    "specificazioneModalita": {
+        "type": "simple",
+        "xpath": "./control/filedesc/editionstmt/edition[@localtype='specificazione']/text()"
+    },
+    "consistenzaPaginazioneLegatura": {
+        "type": "simple",
+        "xpath": "./control/filedesc/notestmt/controlnote/head | ./control/filedesc/notestmt/controlnote/p | ./control/filedesc/notestmt/controlnote/abstract"
+    },
+    "cronologiaRedazione": {
+        "type": "composite",
+        "xpath": "./control/filedesc/publicationstmt/date[@localtype='singleDate'] | ./control/filedesc/publicationstmt/date[@localtype='rangeDate']",
+        "repeatable": true,
+        "transform": {
+            "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+        },
+        "struct": {
+            "estremoCronologicoTestuale": {
+                "type": "simple",
+                "xpath": "./@normal",
+                "transform": {
+                    "classname": "metafad_common_importer_functions_transformers_ExtractFromNormal",
+                    "params": {
+                        "fieldType": "ESTREMO_TESTUALE",
+                        "splitter": "/"
+                    }
+                }
+            },
+            "estremoRemoto_data": {
+                "type": "simple",
+                "xpath": "./@normal",
+                "transform": {
+                    "classname": "metafad_common_importer_functions_transformers_ExtractFromNormal",
+                    "params": {
+                        "fieldType": "REMOTO_DATA",
+                        "splitter": "/"
+                    }
+                }
+            },
+            "estremoRemoto_codificaData": {
+                "type": "simple",
+                "xpath": "./@normal",
+                "transform": {
+                    "classname": "metafad_common_importer_functions_transformers_ExtractFromNormal",
+                    "params": {
+                        "fieldType": "REMOTO_CODIFICA",
+                        "splitter": "/"
+                    }
+                }
+            },
+            "estremoRecente_data": {
+                "type": "simple",
+                "xpath": "./@normal",
+                "transform": {
+                    "classname": "metafad_common_importer_functions_transformers_ExtractFromNormal",
+                    "params": {
+                        "fieldType": "RECENTE_DATA",
+                        "splitter": "/"
+                    }
+                }
+            },
+            "estremoRecente_codificaData": {
+                "type": "simple",
+                "xpath": "./@normal",
+                "transform": {
+                    "classname": "metafad_common_importer_functions_transformers_ExtractFromNormal",
+                    "params": {
+                        "fieldType": "RECENTE_CODIFICA",
+                        "splitter": "/"
+                    }
+                }
+            },
+            "estremoRemoto_validita": {
+                "type": "simple",
+                "xpath": "../date[@localtype='certainty']/text()",
+                "vocabulary": "validita"
+            }
+        }
+    },
+    "cronologiaRedazione2": {
+        "type": "composite",
+        "xpath": "./control/filedesc/publicationstmt/date[@localtype='singleSec'] | ./control/filedesc/publicationstmt/date[@localtype='rangeSec']",
+        "repeatable": true,
+        "transform": {
+            "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+        },
+        "struct": {
+            "estremoCronologicoTestuale": {
+                "type": "simple",
+                "xpath": "./@normal",
+                "transform": {
+                    "classname": "metafad_common_importer_functions_transformers_ExtractFromNormal",
+                    "params": {
+                        "fieldType": "ESTREMO_TESTUALE",
+                        "splitter": "/"
+                    }
+                }
+            },
+            "estremoRemoto_secolo": {
+                "type": "simple",
+                "xpath": "./@normal",
+                "transform": {
+                    "classname": "metafad_common_importer_functions_transformers_ExtractFromNormal",
+                    "params": {
+                        "fieldType": "DATA_SECOLARE_REMOTO",
+                        "splitter": "/"
+                    }
+                }
+            },
+            "estremoRecente_secolo": {
+                "type": "simple",
+                "xpath": "./@normal",
+                "transform": {
+                    "classname": "metafad_common_importer_functions_transformers_ExtractFromNormal",
+                    "params": {
+                        "fieldType": "DATA_SECOLARE_RECENTE",
+                        "splitter": "/"
+                    }
+                }
+            },
+            "estremoRemoto_validita": {
+                "TODO": "GESTIRE LISTA",
+                "type": "simple",
+                "xpath": "../date[@localtype='certainty']/text()",
+                "solver": {
+                    "classname": "metafad_common_importer_functions_solvers_FirstToUppercase",
+                    "params": {}
+                }
+            },
+            "estremoRemoto_specifica": {
+                "TODO": "GESTIRE LISTA",
+                "type": "simple",
+                "xpath": "../date[@localtype='specificaDellaData']/text()",
+                "solver": {
+                    "classname": "metafad_common_importer_functions_solvers_FirstToUppercase",
+                    "params": {}
+                }
+            }
+        }
+    },
+    "cronologiaDiplomatico": {
+        "type": "simple",
+        "xpath": "./control/filedesc/publicationstmt/date",
+        "institute": "diplomatico-firenze"
+    },
+    "noteStoricoRelazionali": {
+        "type": "simple",
+        "xpath": "./control/filedesc/notestmt/controlnote[@localtype='noteStoriche']/head | ./control/filedesc/notestmt/controlnote[@localtype='noteStoriche']/p | ./control/filedesc/notestmt/controlnote[@localtype='noteStoriche']/abstract"
+    },
+    "descIntrinseca": {
+        "type": "simple",
+        "xpath": "./control/filedesc/notestmt/controlnote[@localtype='descrizioneIntrinseca']/head | ./control/filedesc/notestmt/controlnote[@localtype='descrizioneIntrinseca']/p | ./control/filedesc/notestmt/controlnote[@localtype='descrizioneIntrinseca']/abstract"
+    },
+    "autoreStrumentoRicerca": {
+        "type": "composite",
+        "xpath": "./control/filedesc/titlestmt/author",
+        "repeatable": true,
+        "transform": {
+            "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+        },
+        "struct": {
+            "cognomeAutore": {
+                "type": "simple",
+                "xpath": "./text()"
+            },
+            "qualificaRuolo": {
+                "TODO": "necessario un vocabolario in configurazione?",
+                "type": "simple",
+                "xpath": "./@localtype",
+                "solver": {
+                    "classname": "metafad_common_importer_functions_solvers_FirstToUppercase",
+                    "params": {}
+                }
+            }
+        }
+    },
+    "complessoArchivistico": {
+        "type": "composite",
+        "xpath": "./control/localcontrol[@localtype='complArchCollegato']",
+        "repeatable": true,
+        "struct": {
+            "complessoArchivisticoLink": {
+                "type": "composite",
+                "xpath": "./term",
+                "struct": {
+                    "externalID": {
+                        "type": "simple",
+                        "xpath": "./@identifier"
+                    }
+                },
+                "transform": {
+                    "classname": "metafad_common_importer_functions_transformers_GetExternalLink",
+                    "params": {
+                        "model": "archivi.models.ComplessoArchivistico"
+                    }
+                }
+            },
+            "identificativoComplesso": {
+                "type": "simple",
+                "xpath": "./@identifier"
+            }
+        }
+    },
+    "riferimentiWeb": {
+        "type": "composite",
+        "xpath": "./control/representation",
+        "repeatable": true,
+        "transform": {
+            "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+        },
+        "struct": {
+            "descrizione": {
+                "type": "simple",
+                "xpath": "./text()"
+            },
+            "url": {
+                "type": "simple",
+                "xpath": "./@href"
+            }
+        }
+    },
+    "compilazione": {
+        "type": "composite",
+        "xpath": "./control/maintenancehistory/maintenanceevent",
+        "repeatable": true,
+        "transform": {
+            "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+        },
+        "struct": {
+            "redattore": {
+                "type": "simple",
+                "xpath": "./agent/text()"
+            },
+            "azione": {
+                "TODO": "Gestire lista",
+                "type": "simple",
+                "xpath": "./eventtype/@value",
+                "vocabulary": "compilazione_azione"
+
+            },
+            "data": {
+                "type": "simple",
+                "xpath": "./eventdatetime/text()",
+                "solver": {
+                    "classname": "metafad_common_importer_functions_solvers_CompilationDateSolver",
+                    "params": {}
+                }
+            },
+            "tipologiaRedattore": {
+                "type": "simple",
+                "xpath": "./agenttype/@value",
+                "vocabulary": "compilazione_tipologiaRedattore"
+            },
+            "note": {
+                "type": "simple",
+                "xpath": "./eventdescription/text()"
+            }
+        }
+    },
+    "riferimentiBibliografici": {
+        "TODO": "Ogni otherrelationtype è a sé?",
+        "type": "composite",
+        "xpath": "./control/sources/source[@*]",
+        "repeatable": true,
+        "struct": {
+            "linkRiferimentiBibliografici": {
+                "type": "composite",
+                "xpath": ".",
+                "struct": {
+                    "entry": {
+                        "type": "simple",
+                        "xpath": "./sourceentry/text()"
+                    },
+                    "externalID": {
+                        "type": "simple",
+                        "xpath": "./sourceentry/text()"
+                    },
+                    "type": {
+                        "type": "simple",
+                        "xpath": "./@linkrole"
+                    },
+                    "href": {
+                        "type": "simple",
+                        "xpath": "./@href"
+                    },
+                    "tipologiaSpecifica": {
+                        "type": "simple",
+                        "xpath": [],
+                        "default": "bibliografia_tipologiaSpecifica"
+                    },
+                    "annoDiEdizione": {
+                        "type": "simple",
+                        "xpath": [],
+                        "default": "bibliografia_annoDiEdizione"
+                    }
+                },
+                "transform": {
+                    "classname": "metafad_common_importer_functions_transformers_CreateExternalLink",
+                    "params": {
+                        "model": "archivi.models.SchedaBibliografica",
+                        "pageId": "archivi-schedabibliografica",
+                        "function": "createSchedaBibliografica"
+                    }
+                }
+            }
+        }
+    },
+    "osservazioni": {
+        "type": "composite",
+        "xpath": ".",
+        "repeatable": true,
+        "transform": {
+            "classname": "metafad_common_importer_functions_transformers_PurgeVoids"
+        },
+        "struct": {
+            "osservazioni1": {
+                "type": "simple",
+                "xpath": "./control/sources/source[not(@*)]/sourceentry",
+                "transform": {
+                    "classname": "metafad_common_importer_functions_transformers_AddLabel",
+                    "params": {
+                        "label": "Bibliografia"
+                    }
+                }
+            }
+        }
+    }
+}

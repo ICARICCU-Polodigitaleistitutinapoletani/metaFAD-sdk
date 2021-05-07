@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cmp="metafad.usersAndPermissions.roles.views.components.*"
+          xmlns:com="metafad.common.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active"
+                            addQueryString="true" visible="false"/>
+
+    <mvc:State name="index" label="{i18n:Elenco}" url="metafad.usersAndPermissions.roles#list">
+        <com:DataGridAjax id="dataGrid" recordClassName="pinaxcms.roleManager.models.Role"
+                          cssClass="table table-bordered table-striped"
+                          controllerName="metafad.usersAndPermissions.roles.controllers.*" fullTextSearch="false"
+                          JQueryUI="true">
+            <pnx:DataGridColumn columnName="role_name" headerText="{i18n:Nome}"/>
+            <pnx:DataGridColumn columnName="role_active" headerText="{i18n:PNX_USER_ACTIVE}" align="center"
+                                        renderCell="pinaxcms.views.renderer.CellIsActive"/>
+            <pnx:DataGridColumn columnName="role_id" sortable="false" searchable="false" cssClass="actions"
+                                renderCell="pinaxcms.contents.views.renderer.CellEditDelete"/>
+        </com:DataGridAjax>
+        <com:AddButton label="" acl="*,new" routeUrl="metafad.usersAndPermissions.roles" editableRegion="actions"
+                       recordClassName="pinaxcms.roleManager.models.Role" dataGridAjaxId="dataGrid"/>
+    </mvc:State>
+
+    <mvc:State name="edit" label="{i18n:Ruoli}" draw="false">
+        <pnx:Text id="message" visible="false" cssClass="form-group alert alert-error" wrapTag="div"/>
+        <cms:FormEdit id="editForm" newCode="true" controllerName="metafad.usersAndPermissions.roles.controllers.*">
+            <pnx:Hidden id="__id"/>
+            <pnx:Hidden id="__model" value="pinaxcms.roleManager.models.Role"/>
+            <pnx:Input id="role_name" label="{i18n:Nome del ruolo}" size="90" required="true"/>
+            <pnx:Checkbox id="role_active" label="{i18n:Attivo}" data="type=checkbox"/>
+            <pnx:Input readOnly="true" data="type=selectfrom;multiple=true;add_new_values=false;proxy=metafad.usersAndPermissions.users.models.proxy.UsersProxy;return_object=true" id="users" label="{i18n:Utenti associati}" />
+            <cmp:Permissions id="role_permissions" label="{i18n:Permessi}"/>
+
+            <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:PNX_SAVE}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save"
+                                data="action=save" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save"
+                                data="action=saveClose" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link"
+                            cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel"/>
+            </cms:FormButtonsPanel>
+        </cms:FormEdit>
+    </mvc:State>
+
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="metafad.usersAndPermissions.roles.controllers.*"/>
+        <pnx:Hidden id="__model" value="pinaxcms.roleManager.models.Role"/>
+    </mvc:State>
+</mvc:Page>

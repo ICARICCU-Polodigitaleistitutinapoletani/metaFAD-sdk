@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page
+    xmlns:mvc="pinax.mvc.components.*"
+    xmlns:c="metafad.iccd.views.components.*"
+    xmlns:cmp="metafad.gestioneDati.boards.views.components.*"
+    xmlns:com="metafad.common.views.components.*"
+    xmlns:cms="pinaxcms.views.components.*"
+    xmlns:msv="metafad.gestioneDati.massiveEdit.views.components.*"
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:iccd="metafad.thesaurus.views.components.*"
+    id="Page"
+    controllerName="##page_controller_name##"
+    defaultEditableRegion="content"
+    templateType="php"
+    templateFileName="Page.php">
+    <pnx:templateDefine name="dataGridId" defaultValue="dataGrid" />
+    <pnx:templateDefine name="model" required="true" />
+    <pnx:templateDefine name="grid_fields" required="true" />
+    <pnx:templateDefine name="form_fields" required="true" />
+    <pnx:templateDefine name="filterByInstitute" defaultValue="true" />
+    <pnx:templateDefine name="setLastSearch" defaultValue="false" />
+    <pnx:templateDefine name="custom_states" required="false" defaultValue="" />
+    <pnx:templateDefine name="extra_components" required="false" defaultValue="" />
+    <pnx:templateDefine name="primary_key" required="false" defaultValue="document_id" />
+    <pnx:templateDefine name="page_controller_name" required="false" defaultValue="" />
+    <pnx:templateDefine name="controller_name" required="false" defaultValue="pinaxcms.contents.controllers.moduleEdit.*" />
+    <pnx:templateDefine name="documentRenderCell" required="false" defaultValue="metafad.common.views.renderer.CellEditDraftDelete" />
+    <pnx:templateDefine name="show_external_id" required="false" defaultValue="true" />
+    <pnx:templateDefine name="autocompleteController" required="false" defaultValue="" />
+
+    <pnx:Import src="_common.xml" />
+
+    <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs" cssClassCurrent="active" addQueryString="true" visible="true" editableRegion="contentTabs" />
+    <mvc:State name="index">
+        <pnx:JSscript folder="metafad/common/views/js/previewPopupSintetic" />
+        <pnx:Modifier target="tabs" attribute="visible" value="false" />
+        <com:DataGridSolr id="##dataGridId##" enableSorting="true" filterByInstitute="##filterByInstitute##" setLastSearch="##setLastSearch##"
+                          recordClassName="##model##" cssClass="table table-bordered table-striped" fullTextSearch="true" keyAndLabel="true"
+                          autocompleteController="##autocompleteController##">
+            <pnx:DataGridColumn columnName="##primary_key##" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.SelectionFlag" width="20px" checkboxSelectAll="true" checkboxSelectPage="true"/>
+            ##grid_fields##
+            <pnx:DataGridColumn columnName="##primary_key##" sortable="false" searchable="false" cssClass="actions" renderCell="##documentRenderCell##" />
+        </com:DataGridSolr>
+
+        <cmp:AddButton id="dataGridAddButton" acl="*,new" label="" routeUrl="actionsMVCAdd" editableRegion="actions" recordClassName="##model##" cssClass="dataGridAddButton" dataGridAjaxId="##dataGridId##" />
+        <iccd:AddButton buttonId="dataGridEditButton" label="" acl="*,edit" routeUrl="actionsMVCEditMassive" cssClass="button-import edit-massive dataGridAddButton" editableRegion="actions" add="Modifica massiva" recordClassName="metafad.thesaurus.models.ThesaurusForms" dataGridAjaxId="##dataGridId##" iconClass="fa-pencil" />
+        <iccd:AddButton buttonId="delAllSelected" label="" acl="*,edit" cssClass="button-import dellAllSelected dataGridAddButton" editableRegion="actions" add="Elimina Selezionati" recordClassName="metafad.thesaurus.models.ThesaurusForms" dataGridAjaxId="##dataGridId##" iconClass="fa-trash" noLink="true" />
+        <iccd:AddButton buttonId="dataGridPrintButton" label="" acl="*,edit" routeUrl="printpdf" cssClass="button-import print-pdf dataGridAddButton" editableRegion="actions" add="Stampa PDF" recordClassName="metafad.thesaurus.models.ThesaurusForms" dataGridAjaxId="##dataGridId##" iconClass="fa-print" visible="{config:printpdf.enable}"/>
+       
+        <pnx:JSscript folder="metafad/common/views/js/massiveEdit" />
+
+    </mvc:State>
+    <mvc:State name="edit,editDraft" label="{i18n:Scheda}" url="linkEdit">
+        ##extra_components##
+        <pnx:JSscript folder="metafad/common/views/js/previewPopup" />
+        <c:FormEdit id="editForm" newCode="true" controllerName="##controller_name##">
+            <pnx:Hidden id="__id" />
+            <pnx:Hidden id="__model" value="##model##" />
+			<pnx:Hidden id="instituteKey" />
+            <pnx:Input id="external_id" label="{i18n:ID}" size="90" disabled="true" visible="##show_external_id##" />
+            ##form_fields##
+            <cms:FormButtonsPanel id="formButtons">
+                <cmp:PreviousTabButton />
+                <pnx:HtmlButton label="{i18n:PNX_PUBLISH}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save-novalidation" data="action=save" acl="*,publish" />
+                <pnx:HtmlButton label="{i18n:PNX_PUBLISH_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveClose" acl="*,publish" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraft" acl="*,editDraft"/>
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_DRAFT_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraftClose" acl="*,editDraft"/>
+                <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" />
+                <pnx:HtmlButton label="{i18n:Anteprima}" type="button" cssClass="btn btn-flat js-pinaxcms-preview" data="action=preview" />
+                <pnx:HtmlButton label="{i18n:Valida}" type="button" cssClass="btn btn-flat js-pinaxcms-save" data="action=validate" acl="*,publish"/>
+                <cmp:NextTabButton />
+            </cms:FormButtonsPanel>
+        </c:FormEdit>
+    </mvc:State>
+
+    <mvc:State name="storeIDsExport" label=""></mvc:State>
+
+    <mvc:State name="export" label="{i18n:Esporta schede ICCD}">
+		<pnx:Form id="editForm" enctype="multipart/form-data">
+			<!-- <pnx:Hidden id="idsexport" /> -->
+
+        <pnx:Caption label="{i18n:Archivi di controllo}"/>
+        <pnx:Panel id="checkButton">
+	    	  <pnx:Checkbox id="autbib" label="{i18n:Esporta anche le schede AUT e BIB associate}" />
+        </pnx:Panel>
+
+        <pnx:Caption label="{i18n:Formato}"/>
+        <pnx:Panel id="panelFormat">
+          <pnx:List id="format" label="{i18n:Formato}" size="15" required="true">
+              <pnx:ListItem key="trc" value="ICCD 92" />
+              <pnx:ListItem key="iccdxml" value="ICCD XML" />
+          </pnx:List>
+        </pnx:Panel>
+
+	    	<cms:FormButtonsPanel id="formButtons">
+	    		<pnx:HtmlButton label="{i18n:Esporta}" id="confirmExport" value="confirmExport" type="submit" cssClass="btn btn-flat btn-info js-pinaxcms-save"/>
+      	</cms:FormButtonsPanel>
+	    </pnx:Form>
+    </mvc:State>
+
+    <!--
+    <mvc:State name="history" label="{i18n:Storico}" url="linkHistory">
+        <evc:FormEdit id="history" addValidationJs="false">
+           <cms:pageTitleModifier action="history" label="{i18n:Storico}" />
+            <evc:ShowHistory id="history" />
+            <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:Confronta}" type="button" cssClass="btn btn-primary js-pinaxcms-history" data="action=add" />
+            </cms:FormButtonsPanel>
+        </evc:FormEdit>
+    </mvc:State>
+    -->
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="##controller_name##" />
+    </mvc:State>
+    <mvc:State name="editMassive">
+        <cmp:FormList id="formList" />
+        <cmp:DataGridSolrFiltered id="dataGridFiltered" recordClassName="##model##" cssClass="table table-bordered table-striped" fullTextSearch="true" keyAndLabel="true" autocompleteController="metafad.common.controllers.ajax.AutoCompleteMassive" massive="true">
+            <pnx:DataGridColumn columnName="##primary_key##" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.SelectionFlag" width="20px" checkboxSelectPage="true" checkboxSelectAll="true"/>
+            ##grid_fields##
+            <pnx:DataGridColumn columnName="##primary_key##" sortable="false" searchable="false" cssClass="actions" renderCell="metafad.common.views.renderer.CellEditDraftDelete" />
+        </cmp:DataGridSolrFiltered>
+        <pnx:JSscript folder="metafad/common/views/js/massiveEdit" />
+        <msv:FormEditMassiveChild id="editForm" newCode="true" controllerName="##controller_name##">
+            <pnx:Hidden id="__id" />
+            <pnx:Hidden id="__groupId" />
+            <pnx:Hidden id="__model" value="##model##" />
+            <pnx:Hidden id="__selectedIds" />
+            <pnx:Input id="groupName" label="{i18n:Nome gruppo}" size="90" />
+            
+            <msv:FieldsToEmpty id="fieldList" moduleName="##model##" enabled="{config:metafad.massiveDelete.activate}"/>
+            
+            ##form_fields##
+
+            <cms:FormButtonsPanel id="formButtons">
+                <cmp:PreviousTabButton />
+                <pnx:HtmlButton label="{i18n:Salva in stato 'Pubblica'}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save-novalidation" data="action=saveMassive" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:Salva in stato 'Bozza'}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveDraftMassive" acl="*,editDraft"/>
+                <pnx:HtmlButton label="{i18n:Salva gruppo}" type="button" cssClass="btn btn-flat js-pinaxcms-save-novalidation" data="action=saveMassiveGroup" acl="*,editDraft" />
+                <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link" cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel" />
+            </cms:FormButtonsPanel>
+        </msv:FormEditMassiveChild>
+    </mvc:State>
+    <mvc:State name="togglevisibility">
+        <pnx:Hidden controllerName="##controller_name##" />
+    </mvc:State>
+    ##custom_states##
+</mvc:Page>

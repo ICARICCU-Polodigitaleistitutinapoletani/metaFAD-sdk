@@ -1,0 +1,14 @@
+{
+    "id": {
+        "xpath": "./unitid[@identifier] | ../unitid[@identifier]"
+    },
+    "daoSingle": {
+        "xpath": "//did/dao | //did/daoset/dao"
+    },
+    "level": {
+        "xpath": "../@level | ./@level"
+    },
+    "levelMets": {
+        "xpath": "./@level"
+    }
+}

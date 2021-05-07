@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:cmp="metafad.sbn.modules.authoritySBN.views.components.*"
+          xmlns:sbn="metafad.sbn.modules.sbnunimarc.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php"
+          controllerName="metafad.sbn.modules.authoritySBN.controllers.*">
+    <pnx:Import src="_common.xml"/>
+    <pnx:JSscript folder="./core/classes/org/pinaxcms/js/formEdit2"/>
+    <pnx:JSscript folder="./application/classes/metafad/sbn/modules/sbnunimarc/views/js"/>
+    <pnx:JSscript folder="./application/classes/metafad/sbn/modules/sbnunimarc/js"/>
+
+    <mvc:State name="index">
+        <sbn:DataGridSolr id="dataGrid" enableSorting="true" label="{i18n: Elenco Testate}"
+                          recordClassName="metafad.sbn.modules.authoritySBN.model.Model"
+                          cssClass="table table-bordered table-striped" fullTextSearch="true"
+                          docType="authoritySBN"
+                          autocompleteController="metafad.sbn.modules.sbnunimarc.controllers.ajax.AutoComplete">
+            <pnx:DataGridColumn columnName="id" width="20" headerText="{i18n:Identificativo}"/>
+            <pnx:DataGridColumn columnName="Nome_s" width="30" headerText="{i18n:Nome}"/>
+            <pnx:DataGridColumn columnName="Tipo_di_scheda_s" width="20" headerText="{i18n:Tipo di scheda}"/>
+            <pnx:DataGridColumn columnName="Tipo_di_ente_s" width="20" headerText="{i18n:Tipo di ente}"/>
+            <pnx:DataGridColumn columnName="document_id_nxs" width="10" align="center" sortable="false" searchable="false" cssClass="actions"
+                                headerText="{i18n:Azioni}"
+                                renderCell="metafad.sbn.modules.sbnunimarc.views.renderers.CellAction"/>
+        </sbn:DataGridSolr>
+
+    </mvc:State>
+
+    <mvc:State name="show">
+        <cmp:FormEdit id="editFormAuthority"
+                      newCode="true">
+            <pnx:Hidden id="__id"/>
+            <pnx:Hidden id="__model" value="metafad.sbn.modules.authoritySBN.model.Model"/>
+
+            <pnx:JSTabGroup showNav="true">
+                <pnx:JSTab dropdown="true" id="identification_tab"
+                           label="{i18n:Identificazione}" enabled="false" visible="false">
+
+                    <pnx:Fieldset id="identificationQualification_tab" label="{i18n:Identificazione e qualificazione}"
+                                  required="false" visible="false" enabled="false">
+
+                        <sbn:Input authority="true" enabled="false" id="idVID"
+                                   label="{i18n:Identificativo VID}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="ISADN"
+                                   label="{i18n:ISADN}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="language"
+                                   label="{i18n:Lingua}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="idVersion"
+                                   label="{i18n:Identificativo di versione}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="nationality"
+                                   label="{i18n:Nazionalità}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="catalogingRules"
+                                   label="{i18n:Regole di catalogazione}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="elaborationData"
+                                   label="{i18n:Dati per la elaborazione}" readOnly="true"/>
+
+                    </pnx:Fieldset>
+
+                    <pnx:Fieldset id="headerDescription_tab" label="{i18n:Intestazione e descrizione }"
+                                  required="false" visible="false" enabled="false">
+
+                        <sbn:Input authority="true" enabled="false" id="personalName" label="{i18n:Nome di persona}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="groupName" label="{i18n:Nome di gruppo}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="dating" label="{i18n:Datazione}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="informativeNote" label="{i18n:Nota informativa}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="sourceBibliographyPositive"
+                                   label="{i18n:Fonte bibliografica (esito positivo)}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="sourceBibliographyNegative"
+                                   label="{i18n:Fonte bibliografica (esito negativo)}"/>
+
+                    </pnx:Fieldset>
+
+                </pnx:JSTab>
+
+                <pnx:JSTab dropdown="true" id="relation_tab" label="{i18n:Relazioni}"
+                           enabled="false" visible="false" >
+
+                    <pnx:Fieldset id="referralReports_tab" label="{i18n:Relazioni di rinvio }"
+                                  required="false" enabled="false" visible="false" >
+
+                        <sbn:Input authority="true" enabled="false" id="sourceRecord" label="{i18n:Fonte del record}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="variantForms" label="{i18n:Forme varianti}"/>
+
+                    </pnx:Fieldset>
+
+                    <pnx:Fieldset id="seeAlso_tab" label="{i18n:Vedi anche }"
+                                  required="false" enabled="false" visible="false" >
+
+                        <sbn:Input authority="true" enabled="false" id="seeAlsoAuthor" label="{i18n:Vedi anche di autore personale}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="seeAlsoGroup" label="{i18n:Vedi anche di gruppo (ente)}"/>
+
+                        <sbn:Input authority="true" enabled="false" id="vediAnche" label="{i18n:Vedi anche}"/>
+
+                    </pnx:Fieldset>
+
+                </pnx:JSTab>
+
+                <pnx:JSTab dropdown="true" visible="false" id="note_tab" label="{i18n:Note}"
+                           enabled="false">
+
+                    <sbn:Input authority="true" enabled="false" id="cataloguerNotes" label="{i18n:Note del catalogatore}"/>
+
+                </pnx:JSTab>
+
+            </pnx:JSTabGroup>
+
+            <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:Indietro}" type="button" routeUrl="link"
+                                cssClass="btn btn-flat js-pinaxcms-cancel chViewerReturn" data="action=cancel"/>
+            </cms:FormButtonsPanel>
+
+        </cmp:FormEdit>
+
+    </mvc:State>
+
+</mvc:Page>

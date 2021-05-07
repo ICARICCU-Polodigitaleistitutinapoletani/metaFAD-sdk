@@ -1,0 +1,630 @@
+{
+    "/ead//did/unitid": {
+        "identifier": [
+            "#allValues#"
+        ],
+        "label": [
+            "#allValues#"
+        ],
+        "localtype": [
+            "#allValues#"
+        ]
+    },
+    "/ead//did/unittitle": {
+        "localtype": [
+            "denominazione##CA",
+            "altreDenominazioni##CA",
+            "denominazioneParallela##CA",
+            "titolo##U",
+            "titoloAttribuito##U"
+        ]
+    },
+    "/ead//did/unitdatestructured": {
+        "#onlyFather#": true
+    },
+    "/ead//did/physdescstructured": {
+        "physdescstructuredtype": [
+            "materialtype",
+            "spaceoccupied",
+            "otherphysdescstructuredtype"
+        ],
+        "coverage": [
+            "whole"
+        ]
+    },
+    "/ead//did/physdescset/physdescstructured": {
+        "physdescstructuredtype": [
+            "materialtype",
+            "spaceoccupied"
+        ],
+        "coverage": [
+            "whole"
+        ]
+    },
+    "/ead//did/physdescstructured/quantity": {},
+    "/ead//did/physdescstructured/unittype": {},
+    "/ead//did/physdescstructured/physfacet": {
+        "localtype": [
+            "materiaTecnica##UD",
+            "caratteristicheTecniche##UD",
+            "BN/colore##UD",
+            "tipologia##UD",
+            "tecnica##UD",
+            "durata##UD",
+            "sonoro##UD",
+            "tipoRappresentazione##UD",
+            "scrittura##UD",
+            "sigillo##UD",
+            "materialeSigillo##UD"
+        ]
+    },
+    "/ead//did/physdescstructured/descriptivenote": {
+        "#onlyFather#": true
+    },
+    "/ead//did/physdescstructured/physdescset/quantity": {},
+    "/ead//did/physdescstructured/physdescset/unittype": {},
+    "/ead//did/physdescstructured/physdescset/physfacet": {},
+    "/ead//did/physdescstructured/physdescset/descriptivenote": {
+        "#onlyFather#": true
+    },
+    "/ead//custodhist##CA": {
+        "#onlyFather#": true
+    },
+    "/ead//scopecontent": {
+        "#onlyFather#": true
+    },
+    "/ead//arrangement##CA": {
+        "#onlyFather#": true
+    },
+    "/ead//accessrestrict##CA": {
+        "#onlyFather#": true
+    },
+    "/ead//relatedmaterial/archref/ref": {
+        "href": [
+            "#allValues#"
+        ],
+        "target": [
+            "#allValues#"
+        ]
+    },
+    "/ead//relations/relation": {
+        "relationtype": [
+            "otherrelationtype",
+            "resourcerelation"
+        ],
+        "otherrelationtype": [
+            "URL",
+            "BIBTEXT",
+            "BIBID",
+            "BIBSBN",
+            "BIBURI",
+            "FONTETEXT",
+            "FONTEURI"
+        ],
+        "href": [
+            "#allValues#"
+        ]
+    },
+    "/ead//relations/relation/relationentry": {
+        "localtype": [
+            "ComplArchSup"
+        ]
+    },
+    "/ead//did/origination/corpname##CA": {
+        "identifier": [
+            "#allValues#"
+        ]
+    },
+    "/ead//did/origination/corpname/part##CA": {},
+    "/ead//did/origination/famname##CA": {
+        "identifier": [
+            "#allValues#"
+        ]
+    },
+    "/ead//did/origination/famname/part##CA": {},
+    "/ead//did/origination/persname##CA": {
+        "identifier": [
+            "#allValues#"
+        ]
+    },
+    "/ead//did/origination/persname/part##CA": {},
+    "/ead//otherfindaid/archref/ref##CA": {
+        "href": [
+            "#allValues#"
+        ]
+    },
+    "/ead//did/repository/corpname##CA": {
+        "identifier": [
+            "#allValues#"
+        ]
+    },
+    "/ead//did/repository/corpname/part##CA": {},
+    "/ead//did/repository/famname##CA": {
+        "identifier": [
+            "#allValues#"
+        ]
+    },
+    "/ead//did/repository/famname/part##CA": {},
+    "/ead//did/repository/persname##CA": {
+        "identifier": [
+            "#allValues#"
+        ]
+    },
+    "/ead//did/repository/persname/part##CA": {},
+    "/ead//processinfo": {
+        "localtype": [
+            "compilatori"
+        ]
+    },
+    "/ead//processinfo/processinfo": {
+        "localtype": [
+            "compilatore"
+        ]
+    },
+    "/ead//processinfo/processinfo/p/persname/part": {
+        "localtype": [
+            "compilatore",
+            "tipoIntervento",
+            "qualifica",
+            "tipointervento"
+        ]
+    },
+    "/ead//processinfo/processinfo/p/date": {
+        "localtype": [
+            "dataIntervento",
+            "dataintervento"
+        ]
+    },
+    "/ead//controlaccess/subject": {
+        "localtype": [
+            "tematismoCollegato"
+        ]
+    },
+    "/ead//controlaccess/subject/part##U": {},
+    "/ead//did/dao##U": {
+        "daotype": [
+            "#allValues#"
+        ],
+        "coverage": [
+            "#allValues#"
+        ],
+        "id": [
+            "#allValues#"
+        ],
+        "href": [
+            "#allValues#"
+        ],
+        "otherdaotype": [
+            "METS",
+            "MAG"
+        ],
+        "linkrole": [
+            "#allValues#"
+        ],
+        "label": [
+            "#allValues#"
+        ]
+    },
+    "/ead//did/daoset/dao##U": {
+        "daotype": [
+            "#allValues#"
+        ],
+        "coverage": [
+            "#allValues#"
+        ],
+        "id": [
+            "#allValues#"
+        ],
+        "identifier": [
+            "#allValues#"
+        ],
+        "href": [
+            "#allValues#"
+        ],
+        "otherdaotype": [
+            "METS",
+            "MAG"
+        ],
+        "linkrole": [
+            "#allValues#"
+        ],
+        "label": [
+            "#allValues#"
+        ]
+    },
+    "/ead//did/daoset##U": {
+        "coverage": [
+            "#allValues#"
+        ]
+    },
+    "/ead//controlaccess/geogname/part##U": {
+        "localtype": [
+            "voceIndice",
+            "presentName",
+            "historicalName",
+            "luogoRappresentato##UD"
+        ]
+    },
+    "/ead//controlaccess/persname/part##U": {
+        "localtype": [
+            "voceIndice"
+        ]
+    },
+    "/ead//controlaccess/corpname/part##U": {
+        "localtype": [
+            "voceIndice"
+        ]
+    },
+    "/ead//did/physdescstructured/dimensions##UD": {
+        "localtype": [
+            "altezza",
+            "larghezza"
+        ],
+        "unit": [
+            "#allValues#"
+        ]
+    },
+    "/ead//controlaccess/genreform/part##UD": {},
+    "/ead//did/physdescstructured/descriptivenote/p/quote": {
+        "localtype": [
+            "incipit##UD",
+            "explicit##UD"
+        ]
+    },
+    "/ead//did/materialspec##UD": {
+        "localtype": [
+            "Scala"
+        ]
+    },
+    "/ead//did/physdescstructured/descriptivenote/p/geogname/part##UD": {
+        "localtype": [
+            "luogoRappresentato"
+        ]
+    },
+    "ead/control": {
+        "repositoryencoding": [
+            "#allValues#"
+        ],
+        "countryencoding": [
+            "#allValues#"
+        ],
+        "dateencoding": [
+            "#allValues#"
+        ],
+        "scriptencoding": [
+            "#allValues#"
+        ],
+        "langencoding": [
+            "#allValues#"
+        ],
+        "relatedencoding": [
+            "#allValues#"
+        ]
+    },
+    "/ead/control/recordid": {},
+    "/ead/control/filedesc/titlestmt/titleproper": {
+        "encodinganalog": [
+            "title"
+        ],
+        "localtype": [
+            "original"
+        ]
+    },
+    "/ead/control/maintenancestatus": {
+        "value": [
+            "#allValues#"
+        ]
+    },
+    "/ead/control/publicationstatus": {
+        "value": [
+            "#allValues#"
+        ]
+    },
+    "/ead/control/maintenanceagency": {
+        "#onlyFather#": true
+    },
+    "/ead/control/languagedeclaration": {
+        "#onlyFather#": true
+    },
+    "/ead/control/conventiondeclaration": {
+        "#onlyFather#": true
+    },
+    "/ead/control/maintenancehistory": {
+        "#onlyFather#": true
+    },
+    "/ead/control/representation/": {
+        "href": [
+            "#allValues#"
+        ]
+    },
+    "/eac-cpf/cpfDescription/identity": {
+        "localType": [
+            "soggettoProduttore"
+        ]
+    },
+    "/ead/control/otherrecordid": {},
+    "/ead/control/filedesc/editionstmt/edition": {
+        "localtype": [
+            "typology",
+            "support",
+            "published",
+            "tipologia",
+            "specificazione"
+        ]
+    },
+    "/ead/control/filedesc/notestmt/controlnote": {
+        "localtype": [
+            "noteStoriche",
+            "descrizioneIntrinseca"
+        ]
+    },
+    "/ead/control/filedesc/notestmt/controlnote/head": {},
+    "/ead/control/filedesc/notestmt/controlnote/p": {},
+    "/ead/control/filedesc/notestmt/controlnote/abstract": {},
+    "/ead/control/filedesc/publicationstmt/date": {
+        "localtype": [
+            "singleDate",
+            "rangeDate",
+            "specificaDellaData",
+            "singleSec",
+            "rangeSec",
+            "certainty"
+        ],
+        "normal": [
+            "#allValues#"
+        ]
+    },
+    "/ead/control/filedesc/titlestmt/author": {
+        "localtype": [
+            "autore",
+            "curatore"
+        ]
+    },
+    "/ead/control/localcontrol": {
+        "localtype": [
+            "complArchCollegato"
+        ]
+    },
+    "/ead/control/localcontrol/term": {
+        "identifier": [
+            "#allValues#"
+        ]
+    },
+    "/ead/control/representation": {
+        "href": [
+            "#allValues#"
+        ]
+    },
+    "/ead/control/sources/source": {
+        "linkrole": [
+            "#allValues#"
+        ],
+        "href": [
+            "#allValues#"
+        ]
+    },
+    "/ead/control/sources/source/sourceentry": {},
+    "/eac-cpf/control": {},
+    "/eac-cpf/control/recordId": {},
+    "/eac-cpf/control/otherRecordId": {
+        "localType": [
+            "#allValues#"
+        ]
+    },
+    "/eac-cpf/control/maintenanceHistory/maintenanceEvent": {
+        "#onlyFather#": true
+    },
+    "/eac-cpf/cpfDescription/identity/entityType": {},
+    "/eac-cpf/cpfDescription/identity/nameEntry": {
+        "localType": [
+            "altraDenominazione"
+        ],
+        "xml:lang": [
+            "#allValues#"
+        ]
+    },
+    "/eac-cpf/cpfDescription/identity/nameEntry/part": {
+        "localType": [
+            "nome",
+            "patronimico",
+            "soprannome",
+            "pseudonimo"
+        ]
+    },
+    "/eac-cpf/cpfDescription/identity/nameEntry/useDates": {
+        "#onlyFather#": true
+    },
+    "/eac-cpf/cpfDescription/description/place/placeRole": {
+        "vocabularySource": [
+            "#allValues#"
+        ]
+    },
+    "/eac-cpf/cpfDescription/description/place/placeEntry": {
+        "localType": [
+            "presentName",
+            "historicalName"
+        ]
+    },
+    "/eac-cpf/cpfDescription/description/biogHist": {
+        "#onlyFather#": true
+    },
+    "/eac-cpf/cpfDescription/description/existDates": {
+        "#onlyFather#": true
+    },
+    "/eac-cpf/cpfDescription/description/legalStatuses/legalStatus/term": {
+        "#equal#": true
+    },
+    "/eac-cpf/cpfDescription/description/legalStatuses/legalStatus/": {
+        "#onlyFather#": true
+    },
+    "/eac-cpf/cpfDescription/description/localDescription/term": {
+        "vocabularySource": [
+            "#allValues#"
+        ],
+        "#equal#": true
+    },
+    "/eac-cpf/cpfDescription/description/localDescription": {
+        "localType": [
+            "tipologiaEnte",
+            "titoli",
+            "professione",
+            "titoloNobiliare",
+            "genere"
+        ],
+        "#onlyFather#": true
+    },
+    "/eac-cpf/cpfDescription/relations/resourceRelation": {
+        "resourceRelationType": [
+            "creatorOf"
+        ],
+        "xlink:href": [
+            "#allValues#"
+        ]
+    },
+    "/eac-cpf/cpfDescription/relations/resourceRelation/relationEntry": {
+        "localType": [
+            "complesso",
+            "BIBTEXT",
+            "BIBSBN",
+            "FONTETEXT",
+            "FONTEURI",
+            "URL"
+        ]
+    },
+    "/eac-cpf/cpfDescription/relations/cpfRelation": {
+        "xlink:href": [
+            "#allValues#"
+        ]
+    },
+    "/eac-cpf/cpfDescription/relations/cpfRelation/relationEntry": {
+        "localType": [
+            "soggettoProduttore"
+        ]
+    },
+    "/eac-cpf/control/maintenanceStatus": {},
+    "/eac-cpf/control/publicationStatus": {},
+    "/eac-cpf/control/maintenanceAgency": {
+        "#onlyFather#": true
+    },
+    "/eac-cpf/control/languageDeclaration": {
+        "#onlyFather#": true
+    },
+    "/eac-cpf/control/conventionDeclaration": {
+        "#onlyFather#": true
+    },
+    "/scons/identificativi/identificativo": {
+        "tipo": [
+            "#allValues#"
+        ],
+        "href": [
+            "#allValues#"
+        ]
+    },
+    "/scons/identificativi/identificativosistema": {},
+    "/scons/identificativi/altroidentificativo": {
+        "tipo": [
+            "#allValues#"
+        ]
+    },
+    "/scons/denominazione": {
+        "lingua": [
+            "#allValues#"
+        ],
+        "qualifica": [
+            "#allValues#"
+        ],
+        "data": [
+            "#allValues#"
+        ]
+    },
+    "/scons/tipologia": {},
+    "/scons/info/evento": {
+        "tipoEvento": [
+            "#allValues#"
+        ],
+        "dataEvento": [
+            "#allValues#"
+        ]
+    },
+    "/scons/info/evento/agente": {
+        "tipo": [
+            "#allValues#"
+        ]
+    },
+    "/scons/info/evento/agente/nome": {},
+    "/scons/info/evento/agente/cognome": {},
+    "/scons/info/evento/agente/denominazione": {},
+    "/scons/localizzazioni/localizzazione": {
+        "principale": [
+            "S",
+            "N"
+        ],
+        "consultazione": [
+            "S",
+            "N"
+        ],
+        "identificativo": [
+            "#allValues#"
+        ],
+        "privato": [
+            "#allValues#"
+        ]
+    },
+    "/scons/localizzazioni/localizzazione/indirizzo": {
+        "paese": [
+            "#allValues#"
+        ],
+        "regione": [
+            "#allValues#"
+        ],
+        "provincia": [
+            "#allValues#"
+        ],
+        "comune": [
+            "#allValues#"
+        ],
+        "denominazioneStradale": [
+            "#allValues#"
+        ],
+        "numeroCivico": [
+            "#allValues#"
+        ],
+        "cap": [
+            "#allValues#"
+        ]
+    },
+    "/scons/localizzazioni/localizzazione/denominazione": {},
+    "/scons/localizzazioni/localizzazione/orario": {},
+    "/scons/localizzazioni/localizzazione/contatto": {
+        "tipo": [
+            "telefono",
+            "fax",
+            "mail",
+            "pec",
+            "sitoweb"
+        ]
+    },
+    "/scons/localizzazioni/localizzazione/accesso": {},
+    "/scons/descrizione": {},
+    "/scons/servizi": {},
+    "/scons/relazioni/relazione": {
+        "tipo": [
+            "CONS",
+            "URL",
+            "COMPL",
+            "BIBTEXT",
+            "BIBSBN",
+            "FONTETEXT",
+            "FONTEURI"
+        ],
+        "tipoRelSC": [
+            "#allValues#"
+        ],
+        "data": [
+            "#allValues#"
+        ],
+        "href": [
+            "#allValues#"
+        ]
+    }
+}

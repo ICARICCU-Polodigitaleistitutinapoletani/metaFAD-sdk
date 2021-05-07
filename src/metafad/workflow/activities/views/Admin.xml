@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:Page id="Page"
+          xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+          xmlns:cms="pinaxcms.views.components.*"
+          xmlns:mvc="pinax.mvc.components.*"
+          xmlns:cmp="metafad.workflow.activities.views.components.*"
+          xmlns:com="metafad.common.views.components.*"
+          defaultEditableRegion="content"
+          templateType="php"
+          templateFileName="Page.php">
+
+    <pnx:Import src="_common.xml"/>
+
+    <mvc:StateTabNavigation id="tabs" cssClass="nav nav-tabs nav-tabs-flat" cssClassCurrent="active"
+                            addQueryString="true" visible="false"/>
+
+    <mvc:State id="stateIndex" name="index" label="{i18n:Elenco}" url="metafad.workflow.activities#list">
+        <com:DataGridAjax id="dataGrid" recordClassName="metafad.workflow.activities.models.Model"
+                          cssClass="table table-bordered table-striped"
+                          controllerName="metafad.workflow.activities.controllers.*" fullTextSearch="false"
+                          JQueryUI="true">
+            <pnx:DataGridColumn columnName="title" headerText="{i18n:Titolo}"
+                                renderCell="pinaxcms.contents.views.renderer.DocumentTitle"/>
+            <pnx:DataGridColumn columnName="type" headerText="{i18n:Tipo}"
+                                renderCell="pinaxcms.contents.views.renderer.DocumentTitle"/>
+            <pnx:DataGridColumn columnName="document_id" sortable="false" searchable="false" cssClass="actions"
+                                renderCell="pinaxcms.contents.views.renderer.CellEditDelete"/>
+        </com:DataGridAjax>
+        <com:AddButton label="" acl="*,new" routeUrl="metafad.workflow.activities" editableRegion="actions"
+                       recordClassName="metafad.workflow.activities.models.Model" dataGridAjaxId="dataGrid"/>
+    </mvc:State>
+
+    <mvc:State id="stateEdit" name="edit" label="{i18n:Scheda}" draw="false">
+        <cms:FormEdit id="editForm" newCode="true" controllerName="metafad.workflow.activities.controllers.*">
+            <pnx:Hidden id="__id"/>
+            <pnx:Hidden id="__model" value="metafad.workflow.activities.models.Model"/>
+            <com:Container cssClass="col-sm-12">
+            <com:Container cssClass="col-sm-8">
+                <pnx:Input id="title" label="{i18n:Titolo}" size="90" required="true"/>
+            </com:Container>
+            </com:Container>
+            <com:Container cssClass="col-sm-12">
+            <com:Container cssClass="col-sm-8">
+                <pnx:Input id="lock" label="{i18n:Bloccante}" type="checkbox" />
+            </com:Container>
+            </com:Container>
+            <com:Container cssClass="col-sm-12">
+            <com:Container cssClass="col-sm-8">
+                <pnx:List id="type" label="{i18n:Tipo}" required="true">
+                    <pnx:ListItem value="Manuale" key="Manuale"/>
+                    <pnx:ListItem value="Sistema" key="Sistema"/>
+                    <pnx:ListItem value="Utente" key="Utente"/>
+                </pnx:List>
+            </com:Container>
+            </com:Container>
+            <cms:FormButtonsPanel>
+                <pnx:HtmlButton label="{i18n:PNX_SAVE}" type="button" cssClass="btn btn-flat btn-info js-pinaxcms-save"
+                                data="action=save" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_SAVE_CLOSE}" type="button" cssClass="btn btn-flat js-pinaxcms-save"
+                                data="action=saveClose" acl="*,edit" />
+                <pnx:HtmlButton label="{i18n:PNX_CANCEL}" type="button" routeUrl="link"
+                                cssClass="btn btn-flat js-pinaxcms-cancel" data="action=cancel"/>
+            </cms:FormButtonsPanel>
+        </cms:FormEdit>
+    </mvc:State>
+    <mvc:State name="delete">
+        <pnx:Hidden controllerName="metafad.workflow.activities.controllers.Delete"/>
+    </mvc:State>
+
+</mvc:Page>

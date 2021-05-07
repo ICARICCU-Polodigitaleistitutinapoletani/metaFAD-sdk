@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets xmlns="http://www.loc.gov/METS/"
+                    xmlns:metsrights="http://cosimo.stanford.edu/sdr/metsrights"
+                    xmlns:mix="http://www.loc.gov/mix/v20"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:dc="http://purl.org/dc/elements/1.1/"
+                    xsi:schemaLocation="
+	http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd 
+	http://cosimo.stanford.edu/sdr/metsrights/	https://www.loc.gov/standards/rights/METSRights.xsd
+	http://purl.org/dc/elements/1.1/ http://dublincore.org/schemas/xmls/simpledc20021212.xsd
+	http://www.loc.gov/mix/v20	http://www.loc.gov/standards/mix/mix20/mix20.xsd">
+
+    <metsHdr CREATEDATE="" RECORDSTATUS="Complete" LASTMODDATE="">
+        <agent ROLE="IPOWNER" TYPE="ORGANIZATION">
+            <name></name>
+        </agent>
+        <agent ROLE="OTHER" TYPE="ORGANIZATION" OTHERROLE="IdIpOwner">
+            <name></name>
+        </agent>
+        <agent ROLE="CREATOR" TYPE="ORGANIZATION">
+            <name></name>
+        </agent>
+    </metsHdr>
+    <dmdSec ID="">
+        <mdWrap MIMETYPE="text/xml" MDTYPE="DC">
+            <xmlData>
+            </xmlData>
+        </mdWrap>
+    </dmdSec>
+
+    <amdSec ID=""></amdSec>
+
+    <fileSec>
+        <fileGrp USE="reference image"></fileGrp>
+
+    </fileSec>
+
+    <structMap>
+        <div TYPE="Fisica" LABEL="Elenco">
+        </div>
+    </structMap>
+</mets>

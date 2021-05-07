@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model:Model
+    xmlns:pnx="http://www.pinax.org/dtd/1.0/"
+    xmlns:model="pinax.models.*/"
+    model:type="2tables"
+	model:tableName="thesaurus_tbl,thesaurusdetails_tbl"
+    model:joinFields="thesaurus_id,thesaurusdetails_FK_thesaurus_id"
+    model:usePrefix="true">
+
+    <model:Query name="instituteFilter">
+    <![CDATA[
+        SELECT * FROM thesaurusdetails_tbl
+        WHERE thesaurusdetails_FK_thesaurus_id = :thesaurusId
+        AND (thesaurusdetails_instituteKey = :institute_key OR thesaurusdetails_instituteKey IS NULL)
+    ]]>
+    </model:Query>
+</model:Model>
